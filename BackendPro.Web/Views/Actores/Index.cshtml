@@ -1,0 +1,64 @@
+@using System.Linq
+@model IEnumerable<BackendPro.Core.DTOs.ActorDto>
+@{
+    ViewData["Title"] = "Actores";
+    var hasActores = Model.Any();
+}
+
+<div class="section-heading">
+    <span>Administración</span>
+    <h1>Actores</h1>
+</div>
+<section class="toolbar">
+    <p class="mb-0 text-muted">@Model.Count() registros</p>
+    <div class="toolbar-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Create" aria-label="Nuevo actor"><i class="fas fa-plus"></i></a>
+        <button class="btn btn-outline-secondary btn-sm" type="button" aria-label="Filtrar"><i class="fas fa-filter"></i></button>
+    </div>
+</section>
+
+@if (!hasActores)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
+    {
+        Icon = "fas fa-users",
+        Title = "No hay actores registrados",
+        Description = "Registra actores para asociarlos a tus películas y enriquecer la información del reparto.",
+        ActionText = "Gestionar actores",
+        ActionUrl = Url.Action("Index", "Actores")
+    })
+}
+else
+{
+    <div class="card-grid">
+        @foreach (var actor in Model)
+        {
+            var nombre = actor.Nombre ?? string.Empty;
+            var initials = string.Join(string.Empty, nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => char.ToUpperInvariant(s[0])));
+            if (string.IsNullOrWhiteSpace(initials))
+            {
+                initials = "A";
+            }
+            var resumen = string.IsNullOrWhiteSpace(actor.Biografia)
+                ? "Sin biografía registrada."
+                : (actor.Biografia.Length > 140 ? actor.Biografia.Substring(0, 140) + "…" : actor.Biografia);
+            <article class="profile-card">
+                <div class="profile-card-body">
+                    <div class="profile-card-header">
+                        <div class="profile-avatar">@initials</div>
+                        <div>
+                            <h3 class="h5 mb-1">@actor.Nombre</h3>
+                            <span class="badge-soft"><i class="fas fa-cake-candles"></i>@actor.FechaNacimiento.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-0">@resumen</p>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@actor.Id" aria-label="Ver detalle"><i class="fas fa-eye"></i></a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@actor.Id" aria-label="Editar"><i class="fas fa-pen"></i></a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@actor.Id" aria-label="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}

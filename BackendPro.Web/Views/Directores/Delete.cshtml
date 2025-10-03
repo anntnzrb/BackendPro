@@ -1,0 +1,52 @@
+@model BackendPro.Web.Models.DirectorDetailsViewModel
+@{
+    ViewData["Title"] = "Eliminar director";
+    var director = Model.Director;
+    var tienePeliculas = Model.Peliculas.Any();
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-user-tie"></i> Eliminar director</h2>
+        <p>Confirma si deseas eliminar al director y sus asociaciones.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index" aria-label="Volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</section>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h3 class="h5 mb-2"><i class="fas fa-user"></i> @director.Nombre</h3>
+        <div class="meta-list mb-2">
+            <span><i class="fas fa-globe"></i>@director.Nacionalidad</span>
+            <span><i class="fas fa-cake-candles"></i>@director.FechaNacimiento.ToString("dd/MM/yyyy")</span>
+        </div>
+        @if (tienePeliculas)
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                El director tiene películas asociadas. Debes reasignarlas o eliminarlas antes de continuar.
+            </div>
+            <ul class="list-unstyled mb-0">
+                @foreach (var pelicula in Model.Peliculas)
+                {
+                    <li><i class="fas fa-film me-2"></i>@pelicula.Titulo (@pelicula.FechaEstreno:dd/MM/yyyy)</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="alert alert-warning mb-0">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                Esta acción es permanente y no se puede deshacer.
+            </div>
+        }
+        <div asp-validation-summary="ModelOnly" class="text-danger mt-3"></div>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@director.Id" method="post" class="d-flex justify-content-between">
+    <a class="btn btn-outline-secondary" asp-action="Index" aria-label="Cancelar"><i class="fas fa-ban"></i></a>
+    <button type="submit" class="btn btn-danger" @(tienePeliculas ? "disabled" : string.Empty) aria-label="Eliminar"><i class="fas fa-trash"></i></button>
+</form>

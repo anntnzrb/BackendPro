@@ -1,0 +1,93 @@
+root = true
+
+[*.cs]
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
+# Use file-scoped namespaces
+csharp_style_namespace_declarations = file_scoped:warning
+
+# Prefer primary constructors (C# 12)
+csharp_style_prefer_primary_constructors = true:warning
+
+# Prefer target-typed new when type is apparent (C# 9)
+csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
+
+# Prefer collection expressions (C# 12)
+csharp_style_prefer_collection_expression = true:warning
+
+# Pattern matching preferences
+csharp_style_pattern_matching_over_as_with_null_check = true:warning
+csharp_style_pattern_matching_over_is_with_cast_check = true:warning
+csharp_style_prefer_not_pattern = true:warning
+csharp_style_prefer_extended_property_pattern = true:warning
+csharp_style_prefer_pattern_matching = true:warning
+
+# Expression preferences
+csharp_style_prefer_switch_expression = true:warning
+csharp_style_prefer_null_check_over_type_check = true:warning
+
+# Null checking preferences
+csharp_style_throw_expression = true:warning
+csharp_style_conditional_delegate_call = true:warning
+csharp_style_prefer_null_propagation = true:warning
+
+# var preferences
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:warning
+csharp_style_var_elsewhere = false:suggestion
+
+# Expression-bodied members
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_constructors = false:suggestion
+csharp_style_expression_bodied_properties = true:warning
+csharp_style_expression_bodied_accessors = true:warning
+
+# IDE0021: Use expression body for constructors (prefer block body)
+dotnet_diagnostic.IDE0021.severity = none
+
+# Modern modifiers
+dotnet_style_readonly_field = true:warning
+csharp_prefer_static_local_function = true:warning
+
+# Code block preferences
+csharp_prefer_braces = when_multiline:suggestion
+csharp_prefer_simple_using_statement = true:warning
+
+# IDE0002: Simplify member access
+dotnet_diagnostic.IDE0002.severity = warning
+
+# IDE0005: Remove unnecessary using directives
+dotnet_diagnostic.IDE0005.severity = warning
+
+# IDE0007: Use 'var' instead of explicit type
+dotnet_diagnostic.IDE0007.severity = warning
+
+# IDE0008: Use explicit type instead of 'var' (disabled)
+dotnet_diagnostic.IDE0008.severity = none
+
+# IDE0028: Use collection initializers
+dotnet_diagnostic.IDE0028.severity = warning
+
+# IDE0057: Use range operator
+dotnet_diagnostic.IDE0057.severity = warning
+
+# MA0007: Add comma after the last value
+dotnet_diagnostic.MA0007.severity = warning
+
+# MA0042: Do not use blocking calls in async methods
+dotnet_diagnostic.MA0042.severity = warning
+
+# MA0038: Make method static (disabled)
+dotnet_diagnostic.MA0038.severity = none
+
+# RCS1251: Remove unnecessary braces
+dotnet_diagnostic.RCS1251.severity = warning
+
+# CA2227: Collection properties should be read only (disabled for EF Core navigation properties)
+dotnet_diagnostic.CA2227.severity = none
+
+# MA0048: File name must match type name (disabled for Constants files with multiple related classes)
+
+# CA1862: Use StringComparison for case-insensitive comparisons (disabled for DB2 EF Core queries)
+dotnet_diagnostic.CA1862.severity = none

@@ -1,0 +1,53 @@
+@model IEnumerable<BackendPro.Core.DTOs.GeneroDto>
+@{
+    ViewData["Title"] = "Géneros";
+    var hasGeneros = Model.Any();
+}
+
+<div class="section-heading">
+    <span>Administración</span>
+    <h1>Géneros</h1>
+</div>
+<section class="toolbar">
+    <p class="mb-0 text-muted">@Model.Count() registros</p>
+    <div class="toolbar-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Create" aria-label="Nuevo género"><i class="fas fa-plus"></i></a>
+    </div>
+</section>
+
+@if (!hasGeneros)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
+    {
+        Icon = "fas fa-tags",
+        Title = "No hay géneros registrados",
+        Description = "Configura géneros para facilitar la clasificación y filtrado de tus películas.",
+        ActionText = "Gestionar géneros",
+        ActionUrl = Url.Action("Index", "Generos")
+    })
+}
+else
+{
+    <div class="card-grid">
+        @foreach (var genero in Model)
+        {
+            var descripcion = string.IsNullOrWhiteSpace(genero.Descripcion)
+                ? "Sin descripción disponible."
+                : (genero.Descripcion.Length > 160 ? genero.Descripcion.Substring(0, 160) + "…" : genero.Descripcion);
+            <article class="genre-card">
+                <div class="movie-card-content">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h3 class="h5 mb-0"><i class="fas fa-tag me-2 text-primary"></i>@genero.Nombre</h3>
+                        <span class="badge-soft"><i class="fas fa-hashtag"></i>@genero.Id</span>
+                    </div>
+                    <p class="text-muted mb-0">@descripcion</p>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@genero.Id" aria-label="Ver detalle"><i class="fas fa-eye"></i></a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@genero.Id" aria-label="Editar"><i class="fas fa-pen"></i></a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@genero.Id" aria-label="Eliminar"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}

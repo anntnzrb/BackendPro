@@ -1,0 +1,397 @@
+@model BackendPro.Web.Models.PeliculaFormViewModel
+
+<input asp-for="Id" type="hidden" />
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+    <i class="fas fa-triangle-exclamation me-2"></i>
+    <strong>Por favor corrige los siguientes errores:</strong>
+    <ul class="mb-0 mt-2"></ul>
+</div>
+
+<!-- Section 1: Basic Information -->
+<div class="form-section mb-4">
+    <div class="section-header mb-3">
+        <h3 class="h5 mb-0">
+            <i class="fas fa-film me-2 text-primary"></i>
+            Información básica
+        </h3>
+        <p class="text-muted mb-0 small">Datos principales de la película</p>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Titulo" class="form-control" placeholder="Título" />
+                        <label asp-for="Titulo">Título de la película</label>
+                        <span asp-validation-for="Titulo" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input asp-for="Duracion" class="form-control" placeholder="Duración" type="number" />
+                        <label asp-for="Duracion">Duración (min)</label>
+                        <span asp-validation-for="Duracion" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input asp-for="FechaEstreno" class="form-control" placeholder="Fecha" type="date" />
+                        <label asp-for="FechaEstreno">Fecha de estreno</label>
+                        <span asp-validation-for="FechaEstreno" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 2: Synopsis -->
+<div class="form-section mb-4">
+    <div class="section-header mb-3">
+        <h3 class="h5 mb-0">
+            <i class="fas fa-align-left me-2 text-primary"></i>
+            Sinopsis
+        </h3>
+        <p class="text-muted mb-0 small">
+            <span id="synopsisCount">0</span>/2000 caracteres
+        </p>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="form-floating">
+                <textarea asp-for="Sinopsis" class="form-control" placeholder="Sinopsis" rows="6" id="sinopsisTextarea" style="min-height: 120px; resize: none;"></textarea>
+                <label asp-for="Sinopsis">Describe la trama principal de la película</label>
+                <span asp-validation-for="Sinopsis" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 3: Classification -->
+<div class="form-section mb-4">
+    <div class="section-header mb-3">
+        <h3 class="h5 mb-0">
+            <i class="fas fa-tags me-2 text-primary"></i>
+            Clasificación
+        </h3>
+        <p class="text-muted mb-0 small">Género y director</p>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select asp-for="GeneroId" asp-items="Model.Generos" class="form-select">
+                            <option value="">Selecciona un género</option>
+                        </select>
+                        <label asp-for="GeneroId">Género cinematográfico</label>
+                        <span asp-validation-for="GeneroId" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select asp-for="DirectorId" asp-items="Model.Directores" class="form-select">
+                            <option value="">Selecciona un director</option>
+                        </select>
+                        <label asp-for="DirectorId">Director de la película</label>
+                        <span asp-validation-for="DirectorId" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 4: Media -->
+<div class="form-section mb-4">
+    <div class="section-header mb-3">
+        <h3 class="h5 mb-0">
+            <i class="fas fa-image me-2 text-primary"></i>
+            Imagen de la película
+        </h3>
+        <p class="text-muted mb-0 small">Sube un archivo o proporciona una URL</p>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content text-center p-4 border-2 border-dashed rounded-3">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                            <h6 class="mb-2">Arrastra una imagen aquí</h6>
+                            <p class="text-muted small mb-3">o haz clic para seleccionar</p>
+                            <input asp-for="ImagenFile" type="file" class="form-control d-none" accept="image/*" id="imagenFile" />
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('imagenFile').click()">
+                                <i class="fas fa-folder-open me-2"></i>Seleccionar archivo
+                            </button>
+                            <p class="text-muted small mt-2 mb-0">JPG, PNG o WEBP (máx. 5MB)</p>
+                            <span asp-validation-for="ImagenFile" class="text-danger small d-block mt-2"></span>
+                        </div>
+                    </div>
+                    
+                    <div id="imagePreview" class="mt-3" style="display: none;">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="mb-0">Vista previa</h6>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearImage()">
+                                <i class="fas fa-times me-1"></i>Eliminar
+                            </button>
+                        </div>
+                        <div class="preview-container">
+                            <img id="previewImg" src="#" alt="Vista previa" class="img-fluid rounded-3 shadow-sm" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="divider-text d-flex align-items-center my-3">
+                        <span class="px-3 text-muted small">O</span>
+                    </div>
+                    <div class="form-floating">
+                        <input asp-for="ImagenUrl" class="form-control" placeholder="https://ejemplo.com/imagen.jpg" />
+                        <label asp-for="ImagenUrl">URL de imagen externa</label>
+                        <span asp-validation-for="ImagenUrl" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 5: Cast -->
+<div class="form-section mb-4">
+    <div class="section-header mb-3">
+        <h3 class="h5 mb-0">
+            <i class="fas fa-users me-2 text-primary"></i>
+            Reparto
+        </h3>
+        <p class="text-muted mb-0 small">
+            Selecciona los actores principales 
+            <span id="selectedCount" class="badge bg-primary ms-2">0 seleccionados</span>
+        </p>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="actors-selection">
+                        <div class="search-box mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="actorSearch" placeholder="Buscar actor..." />
+                            </div>
+                        </div>
+                        
+                        <div class="actors-grid" id="actorsGrid">
+                            @foreach (var actor in Model.Actores)
+                            {
+                                <div class="actor-item" data-actor-name="@actor.Text.ToLower()">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="@actor.Value" id="actor_@actor.Value" name="ActorIds">
+                                        <label class="form-check-label actor-label" for="actor_@actor.Value">
+                                            <i class="fas fa-user-circle me-2"></i>
+                                            @actor.Text
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        @if (!Model.Actores.Any())
+                        {
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-users fa-2x mb-2"></i>
+                                <p>No hay actores registrados. <a asp-controller="Actores" asp-action="Create">Agrega algunos actores primero</a>.</p>
+                            </div>
+                        }
+                        
+                        <span asp-validation-for="ActorIds" class="text-danger small d-block mt-2"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Image upload and preview
+    const fileInput = document.getElementById('imagenFile');
+    const preview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const uploadArea = document.getElementById('uploadArea');
+    
+    // Drag and drop functionality
+    if (uploadArea) {
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.querySelector('.upload-content').style.background = '#e3f2fd';
+            uploadArea.querySelector('.upload-content').style.borderColor = 'var(--color-primary)';
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadArea.querySelector('.upload-content').style.background = '#f8f9fa';
+            uploadArea.querySelector('.upload-content').style.borderColor = '#dee2e6';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.querySelector('.upload-content').style.background = '#f8f9fa';
+            uploadArea.querySelector('.upload-content').style.borderColor = '#dee2e6';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                fileInput.files = files;
+                handleImageUpload(files[0]);
+            }
+        });
+    }
+    
+    // File input change handler
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleImageUpload(file);
+            }
+        });
+    }
+    
+    function handleImageUpload(file) {
+        // Check file size (5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('El archivo es demasiado grande. El tamaño máximo es 5MB.');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+            uploadArea.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    // Clear image function
+    window.clearImage = function() {
+        fileInput.value = '';
+        preview.style.display = 'none';
+        uploadArea.style.display = 'block';
+        previewImg.src = '#';
+    };
+    
+    // Synopsis character counter
+    const synopsisTextarea = document.getElementById('synopsisTextarea');
+    const synopsisCount = document.getElementById('synopsisCount');
+    
+    if (synopsisTextarea && synopsisCount) {
+        function updateCharCount() {
+            const count = synopsisTextarea.value.length;
+            synopsisCount.textContent = count;
+            
+            if (count > 2000) {
+                synopsisCount.classList.add('text-danger');
+                synopsisCount.classList.remove('text-muted');
+            } else if (count > 1800) {
+                synopsisCount.classList.add('text-warning');
+                synopsisCount.classList.remove('text-muted', 'text-danger');
+            } else {
+                synopsisCount.classList.add('text-muted');
+                synopsisCount.classList.remove('text-warning', 'text-danger');
+            }
+        }
+        
+        synopsisTextarea.addEventListener('input', updateCharCount);
+        updateCharCount(); // Initial count
+    }
+    
+    // Actor search functionality
+    const actorSearch = document.getElementById('actorSearch');
+    const actorsGrid = document.getElementById('actorsGrid');
+    const selectedCount = document.getElementById('selectedCount');
+    
+    if (actorSearch && actorsGrid) {
+        actorSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const actorItems = actorsGrid.querySelectorAll('.actor-item');
+            
+            actorItems.forEach(item => {
+                const actorName = item.dataset.actorName;
+                if (actorName.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Update selected actors count
+    function updateSelectedCount() {
+        const checkedBoxes = document.querySelectorAll('input[name="ActorIds"]:checked');
+        if (selectedCount) {
+            selectedCount.textContent = checkedBoxes.length + ' seleccionados';
+        }
+    }
+    
+    // Add event listeners to all actor checkboxes
+    const actorCheckboxes = document.querySelectorAll('input[name="ActorIds"]');
+    actorCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+    
+    // Initial count
+    updateSelectedCount();
+    
+    // Form validation enhancement
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Clear previous validation states
+            const invalidInputs = form.querySelectorAll('.is-invalid');
+            invalidInputs.forEach(input => input.classList.remove('is-invalid'));
+            
+            // Add visual feedback for invalid fields
+            const validationSummary = document.querySelector('[asp-validation-summary="ModelOnly"]');
+            if (validationSummary && validationSummary.querySelector('ul li')) {
+                const errorList = validationSummary.querySelector('ul');
+                const errors = Array.from(errorList.querySelectorAll('li')).map(li => li.textContent);
+                
+                // Highlight fields with errors
+                errors.forEach(error => {
+                    const fieldName = error.split(' ')[0].toLowerCase();
+                    const field = document.querySelector(`[asp-for="${fieldName}"], [name="${fieldName}"]`);
+                    if (field) {
+                        field.classList.add('is-invalid');
+                    }
+                });
+            }
+        });
+    }
+    
+    // Auto-save draft functionality (optional enhancement)
+    let autoSaveTimer;
+    const formInputs = form.querySelectorAll('input, textarea, select');
+    
+    formInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(function() {
+                // Here you could implement auto-save to localStorage
+                console.log('Auto-saving draft...');
+            }, 2000);
+        });
+    });
+});
+</script>

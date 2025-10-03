@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KinemaFX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BackendPro.Web.styles.css" asp-append-version="true" />
+    @RenderSection("PageStyles", required: false)
+</head>
+<body class="app-shell">
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    }
+    <header class="app-topbar">
+        <div class="container-fluid px-4 py-3 d-flex align-items-center justify-content-between">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span><i class="fas fa-clapperboard"></i> KinemaFX</span>
+            </a>
+        </div>
+    </header>
+    <div class="app-body">
+        <aside class="app-sidebar" id="appSidebar">
+            <div>
+                <div class="app-sidebar-title">Principal</div>
+                <nav class="app-menu">
+                    <a class="menu-link @(currentController == "Home" ? "active" : string.Empty)" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-gauge"></i><span>Panel general</span></a>
+                    <a class="menu-link @(currentController == "Peliculas" ? "active" : string.Empty)" asp-area="" asp-controller="Peliculas" asp-action="Index"><i class="fas fa-film"></i><span>Películas</span></a>
+                </nav>
+            </div>
+            <div>
+                <div class="app-sidebar-title">Catálogos</div>
+                <nav class="app-menu">
+                    <a class="menu-link @(currentController == "Generos" ? "active" : string.Empty)" asp-area="" asp-controller="Generos" asp-action="Index"><i class="fas fa-tags"></i><span>Géneros</span></a>
+                    <a class="menu-link @(currentController == "Directores" ? "active" : string.Empty)" asp-area="" asp-controller="Directores" asp-action="Index"><i class="fas fa-user-tie"></i><span>Directores</span></a>
+                    <a class="menu-link @(currentController == "Actores" ? "active" : string.Empty)" asp-area="" asp-controller="Actores" asp-action="Index"><i class="fas fa-users"></i><span>Actores</span></a>
+                </nav>
+            </div>
+        </aside>
+        <main class="app-main">
+            <div class="app-container">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+    <footer class="app-footer">
+        <div class="app-container footer-inner">
+            <span>&copy; @DateTime.UtcNow.Year KinemaFX</span>
+            <a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,71 @@
+@model BackendPro.Web.Models.DirectorDetailsViewModel
+@{
+    ViewData["Title"] = Model.Director.Nombre;
+    var edad = (int)((DateTime.UtcNow - Model.Director.FechaNacimiento).TotalDays / 365.25);
+    var tienePeliculas = Model.Peliculas.Any();
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-user-tie"></i> @Model.Director.Nombre</h2>
+        <p>Información del director y sus películas disponibles en KinemaFX.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@Model.Director.Id" aria-label="Editar"><i class="fas fa-pen"></i></a>
+        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@Model.Director.Id" aria-label="Eliminar"><i class="fas fa-trash"></i></a>
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index" aria-label="Volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</section>
+
+<section>
+    <div class="profile-card">
+        <div class="profile-card-body">
+            <div class="profile-card-header">
+                <div class="profile-avatar">@string.Join(string.Empty, Model.Director.Nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => char.ToUpperInvariant(s[0])))</div>
+                <div>
+                    <h3 class="h4 mb-1">@Model.Director.Nombre</h3>
+                    <span class="badge-soft"><i class="fas fa-passport"></i>@Model.Director.Nacionalidad</span>
+                    <span class="badge-soft"><i class="fas fa-calendar-day"></i>@Model.Director.FechaNacimiento.ToString("dd/MM/yyyy")</span>
+                    <span class="badge-soft"><i class="fas fa-hourglass-half"></i>@edad años</span>
+                </div>
+            </div>
+            <p class="text-muted mb-0">Director reconocido por sus aportes al cine contemporáneo. Consulta las producciones disponibles abajo.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="section-heading">
+        <span>Producciones</span>
+        <h2>Películas dirigidas</h2>
+    </div>
+    @if (!tienePeliculas)
+    {
+        @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
+        {
+            Icon = "fas fa-video",
+            Title = "No hay películas registradas",
+            Description = "Este director aún no tiene películas asociadas dentro del catálogo."
+        })
+    }
+    else
+    {
+        <div class="card-grid">
+            @foreach (var pelicula in Model.Peliculas)
+            {
+                <article class="genre-card">
+                    <div class="movie-card-content">
+                        <h3 class="h5 mb-1">@pelicula.Titulo</h3>
+                        <div class="meta-list">
+                            <span><i class="fas fa-calendar"></i>@pelicula.FechaEstreno.ToString("dd/MM/yyyy")</span>
+                            <span><i class="fas fa-tag"></i>@pelicula.Genero</span>
+                        </div>
+                        <a class="btn btn-outline-primary btn-sm align-self-start" asp-controller="Peliculas" asp-action="Details" asp-route-id="@pelicula.Id" aria-label="Ver película">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

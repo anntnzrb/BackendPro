@@ -1,0 +1,136 @@
+@using System.Collections.Generic
+@using System.Linq
+@model IEnumerable<BackendPro.Core.DTOs.PeliculaDto>
+@{
+    ViewData["Title"] = "Películas";
+    var hasPeliculas = Model.Any();
+    var generos = ViewBag.Generos as IEnumerable<BackendPro.Core.DTOs.GeneroDto> ?? Enumerable.Empty<BackendPro.Core.DTOs.GeneroDto>();
+    var selectedGeneroId = ViewBag.GeneroId as int?;
+    var searchTerm = ViewBag.SearchTerm as string;
+    var hasActiveFilters = selectedGeneroId.HasValue || !string.IsNullOrWhiteSpace(searchTerm);
+}
+
+<div class="section-heading">
+    <span>Administración</span>
+    <h1>Películas</h1>
+</div>
+<section class="toolbar">
+    <p class="mb-0 text-muted">@Model.Count() registros</p>
+    <div class="toolbar-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Create" aria-label="Nueva película"><i class="fas fa-plus"></i></a>
+    </div>
+</section>
+
+<section class="panel">
+        <h5 class="card-title mb-3"><i class="fas fa-filter me-2"></i>Filtros de búsqueda</h5>
+        <form method="get" asp-action="Index">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="generoId" class="form-label">Género</label>
+                    <select name="generoId" id="generoId" class="form-select">
+                        <option value="">Todos los géneros</option>
+                        @foreach (var genero in generos)
+                        {
+                            <option value="@genero.Id" selected="@(selectedGeneroId == genero.Id)">@genero.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="searchTerm" class="form-label">Buscar por título</label>
+                    <input type="text" name="searchTerm" id="searchTerm" class="form-control" placeholder="Ingrese el título..." value="@searchTerm" />
+                </div>
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary" aria-label="Buscar"><i class="fas fa-search"></i></button>
+                    @if (hasActiveFilters)
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary" aria-label="Limpiar filtros"><i class="fas fa-times"></i></a>
+                    }
+                </div>
+            </div>
+        </form>
+        @if (hasActiveFilters)
+        {
+            <div class="mt-3">
+                <span class="badge bg-info me-2">
+                    <i class="fas fa-filter me-1"></i>
+                    Filtros activos:
+                    @if (selectedGeneroId.HasValue)
+                    {
+                        var generoSeleccionado = generos.FirstOrDefault(g => g.Id == selectedGeneroId.Value);
+                        <span>Género: @generoSeleccionado?.Nombre</span>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(searchTerm))
+                    {
+                        <span>@(selectedGeneroId.HasValue ? " | " : string.Empty)Título: "@searchTerm"</span>
+                    }
+                </span>
+            </div>
+        }
+</section>
+
+@if (!hasPeliculas)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
+    {
+        Icon = "fas fa-film",
+        Title = "No hay películas registradas",
+        Description = "Cuando agregues nuevas películas al catálogo podrás visualizarlas y consultarlas desde este panel.",
+        ActionText = "Ir al catálogo",
+        ActionUrl = Url.Action("Index", "Peliculas")
+    })
+}
+else
+{
+    <div class="panel">
+        <div class="table-responsive">
+        <table class="table table-sm table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Género</th>
+                    <th>Director</th>
+                    <th>Duración</th>
+                    <th>Estreno</th>
+                    <th>Reparto</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var pelicula in Model)
+            {
+                var actores = pelicula.Actores?
+                    .Where(a => !string.IsNullOrWhiteSpace(a.Nombre))
+                    .Select(a => a.Nombre)
+                    .Take(3)
+                    .ToList() ?? new List<string>();
+                var sinopsis = string.IsNullOrWhiteSpace(pelicula.Sinopsis)
+                    ? "Sin sinopsis disponible."
+                    : (pelicula.Sinopsis.Length > 120 ? pelicula.Sinopsis[..120] + "…" : pelicula.Sinopsis);
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@pelicula.Id">@pelicula.Titulo</a>
+                        <div class="text-muted small">@sinopsis</div>
+                    </td>
+                    <td>@pelicula.Genero.Nombre</td>
+                    <td>@pelicula.Director.Nombre</td>
+                    <td>@pelicula.Duracion min</td>
+                    <td>@pelicula.FechaEstreno.ToString("dd/MM/yyyy")</td>
+                    <td>@(actores.Any() ? string.Join(", ", actores) : "-")</td>
+                    <td class="text-end">
+                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@pelicula.Id" aria-label="Ver">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@pelicula.Id" aria-label="Editar">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@pelicula.Id" aria-label="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        </div>
+    </div>
+}

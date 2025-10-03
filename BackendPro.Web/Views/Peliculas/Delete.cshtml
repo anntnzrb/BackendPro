@@ -1,0 +1,43 @@
+@model BackendPro.Core.DTOs.PeliculaDto
+@{
+    ViewData["Title"] = "Eliminar película";
+    var actores = Model.Actores?.ToList() ?? new List<BackendPro.Core.DTOs.ActorDto>();
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-clapperboard"></i> Eliminar película</h2>
+        <p>Confirma si deseas eliminar la película del catálogo.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index" aria-label="Volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</section>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h3 class="h5 mb-2"><i class="fas fa-film"></i> @Model.Titulo</h3>
+        <div class="chip-group mb-2">
+            <span class="chip"><i class="fas fa-tag me-1"></i>@Model.Genero.Nombre</span>
+            <span class="chip"><i class="fas fa-user-tie me-1"></i>@Model.Director.Nombre</span>
+            <span class="chip"><i class="fas fa-calendar me-1"></i>@Model.FechaEstreno:dd/MM/yyyy</span>
+        </div>
+        <p class="text-muted mb-3">@(string.IsNullOrWhiteSpace(Model.Sinopsis) ? "Sin sinopsis disponible." : Model.Sinopsis)</p>
+        @if (actores.Any())
+        {
+            <div class="mb-2">
+                <strong><i class="fas fa-users me-2"></i>Reparto:</strong>
+                <span>@string.Join(", ", actores.Select(a => a.Nombre))</span>
+            </div>
+        }
+        <div class="alert alert-warning mb-0">
+            <i class="fas fa-triangle-exclamation me-2"></i>
+            Esta acción eliminará la película y sus asociaciones con el reparto.
+        </div>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex justify-content-between">
+    <a class="btn btn-outline-secondary" asp-action="Index" aria-label="Cancelar"><i class="fas fa-ban"></i></a>
+    <button type="submit" class="btn btn-danger" aria-label="Eliminar"><i class="fas fa-trash"></i></button>
+</form>

@@ -1,0 +1,110 @@
+@model BackendPro.Web.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Panel general";
+}
+
+<section class="hero-banner">
+    <h1>Gestión cinematográfica sin complicaciones</h1>
+    <p>Administra películas, géneros, directores y actores con un panel moderno y responsivo diseñado para equipos ágiles.</p>
+    <div class="hero-actions">
+        <a class="btn btn-light btn-lg" asp-area="" asp-controller="Peliculas" asp-action="Index" aria-label="Ver catálogo"><i class="fas fa-film"></i></a>
+        <a class="btn btn-outline-light btn-lg" asp-area="" asp-controller="Generos" asp-action="Index" aria-label="Configurar catálogos"><i class="fas fa-plus"></i></a>
+    </div>
+</section>
+
+<section>
+    <div class="section-heading">
+        <span>Métricas clave</span>
+        <h2>Visión general del contenido</h2>
+    </div>
+    <div class="stat-grid">
+        <article class="stat-card">
+            <div class="stat-icon bg-primary">
+                <i class="fas fa-film"></i>
+            </div>
+            <div class="stat-value">@Model.TotalPeliculas</div>
+            <div class="stat-label">Películas registradas</div>
+            <a class="btn btn-outline-primary btn-sm w-auto" asp-area="" asp-controller="Peliculas" asp-action="Index" aria-label="Gestionar"><i class="fas fa-cog"></i></a>
+        </article>
+        <article class="stat-card">
+            <div class="stat-icon bg-success">
+                <i class="fas fa-tags"></i>
+            </div>
+            <div class="stat-value">@Model.TotalGeneros</div>
+            <div class="stat-label">Géneros disponibles</div>
+            <a class="btn btn-outline-success btn-sm w-auto" asp-area="" asp-controller="Generos" asp-action="Index" aria-label="Explorar"><i class="fas fa-compass"></i></a>
+        </article>
+        <article class="stat-card">
+            <div class="stat-icon bg-warning text-dark">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="stat-value">@Model.TotalDirectores</div>
+            <div class="stat-label">Directores registrados</div>
+            <a class="btn btn-outline-warning btn-sm w-auto" asp-area="" asp-controller="Directores" asp-action="Index" aria-label="Administrar"><i class="fas fa-cog"></i></a>
+        </article>
+        <article class="stat-card">
+            <div class="stat-icon bg-info">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-value">@Model.TotalActores</div>
+            <div class="stat-label">Actores en el sistema</div>
+            <a class="btn btn-outline-info btn-sm w-auto" asp-area="" asp-controller="Actores" asp-action="Index" aria-label="Ver listado"><i class="fas fa-list"></i></a>
+        </article>
+    </div>
+</section>
+
+<section>
+    <div class="section-heading">
+        <span>Accesos directos</span>
+        <h2>Navegación rápida</h2>
+    </div>
+    <div class="feature-grid">
+        <article class="feature-card">
+            <i class="fas fa-clapperboard"></i>
+            <div>
+                <h4>Catálogo de películas</h4>
+                <p>Explora las producciones, consulta sinopsis y mantén actualizadas las fichas técnicas.</p>
+            </div>
+            <a class="btn btn-primary btn-sm align-self-start" asp-area="" asp-controller="Peliculas" asp-action="Index" aria-label="Ir a películas"><i class="fas fa-film"></i></a>
+        </article>
+        <article class="feature-card">
+            <i class="fas fa-users"></i>
+            <div>
+                <h4>Directores y actores</h4>
+                <p>Gestiona perfiles, biografías y relaciones con las películas de manera centralizada.</p>
+            </div>
+            <a class="btn btn-primary btn-sm align-self-start" asp-area="" asp-controller="Actores" asp-action="Index" aria-label="Gestionar talento"><i class="fas fa-users"></i></a>
+        </article>
+        <article class="feature-card">
+            <i class="fas fa-tags"></i>
+            <div>
+                <h4>Clasificación por géneros</h4>
+                <p>Construye catálogos consistentes para potenciar la búsqueda y recomendaciones.</p>
+            </div>
+            <a class="btn btn-primary btn-sm align-self-start" asp-area="" asp-controller="Generos" asp-action="Index" aria-label="Organizar géneros"><i class="fas fa-tags"></i></a>
+        </article>
+    </div>
+</section>
+
+@if (Model.TotalPeliculas == 0)
+{
+    <section>
+        <div class="alert-hero">
+            <div class="icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div>
+                <h4>Comienza creando tus catálogos</h4>
+                <p>Agrega géneros, directores y actores para construir una base sólida antes de registrar la primera película.</p>
+            </div>
+        </div>
+        @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
+        {
+            Icon = "fas fa-film",
+            Title = "Aún no hay películas",
+            Description = "El catálogo aparecerá aquí cuando registres tus primeras producciones cinematográficas.",
+            ActionText = "",
+            ActionUrl = Url.Action("Index", "Peliculas")
+        })
+    </section>
+}

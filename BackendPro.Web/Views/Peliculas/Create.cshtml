@@ -1,0 +1,26 @@
+@model BackendPro.Web.Models.PeliculaFormViewModel
+@{
+    ViewData["Title"] = "Nueva película";
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-clapperboard"></i> Registrar película</h2>
+        <p>Completa los datos necesarios para incorporar una nueva producción al catálogo.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index" aria-label="Volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</section>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="mt-3">
+    <partial name="_Form" model="Model" />
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-outline-secondary" asp-action="Index" aria-label="Cancelar"><i class="fas fa-ban"></i></a>
+        <button type="submit" class="btn btn-primary" aria-label="Guardar"><i class="fas fa-save"></i></button>
+    </div>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

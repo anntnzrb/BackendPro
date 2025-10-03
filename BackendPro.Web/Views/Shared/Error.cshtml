@@ -1,0 +1,24 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="error-card">
+    <i class="fas fa-triangle-exclamation"></i>
+    <h1>Ha ocurrido un error</h1>
+    <p>Se produjo un problema al procesar tu solicitud. Nuestro equipo ha registrado el incidente y revisará lo sucedido.</p>
+
+    @if (Model.ShowRequestId)
+    {
+        <p class="mb-0">
+            <strong>Identificador de seguimiento:</strong>
+            <code>@Model.RequestId</code>
+        </p>
+    }
+
+    <p class="mb-0">Si el problema persiste, contacta al administrador del sistema.</p>
+
+    <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Volver al panel">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+</div>

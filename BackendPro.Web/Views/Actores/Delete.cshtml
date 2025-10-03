@@ -1,0 +1,35 @@
+@model BackendPro.Core.DTOs.ActorDto
+@{
+    ViewData["Title"] = "Eliminar actor";
+    var edad = (int)((DateTime.UtcNow - Model.FechaNacimiento).TotalDays / 365.25);
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-user-xmark"></i> Eliminar actor</h2>
+        <p>Confirma si deseas eliminar el intérprete del catálogo.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index" aria-label="Volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</section>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h3 class="h5 mb-2"><i class="fas fa-user"></i> @Model.Nombre</h3>
+        <p class="text-muted mb-2">@(string.IsNullOrWhiteSpace(Model.Biografia) ? "Sin biografía disponible." : Model.Biografia)</p>
+        <div class="meta-list">
+            <span><i class="fas fa-cake-candles"></i>@Model.FechaNacimiento.ToString("dd/MM/yyyy")</span>
+            <span><i class="fas fa-hourglass"></i>@edad años</span>
+        </div>
+        <div class="alert alert-warning mt-3 mb-0">
+            <i class="fas fa-triangle-exclamation me-2"></i>
+            Esta acción eliminará al actor y sus asociaciones en el reparto de las películas.
+        </div>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex justify-content-between">
+    <a class="btn btn-outline-secondary" asp-action="Index" aria-label="Cancelar"><i class="fas fa-ban"></i></a>
+    <button type="submit" class="btn btn-danger" aria-label="Eliminar"><i class="fas fa-trash"></i></button>
+</form>

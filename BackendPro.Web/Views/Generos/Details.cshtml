@@ -1,0 +1,57 @@
+@model BackendPro.Web.Models.GeneroDetailsViewModel
+@{
+    ViewData["Title"] = Model.Genero.Nombre;
+    var tienePeliculas = Model.Peliculas.Any();
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-tags"></i> @Model.Genero.Nombre</h2>
+        <p>Categoría cinematográfica con su descripción y películas asociadas.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@Model.Genero.Id" aria-label="Editar"><i class="fas fa-pen"></i></a>
+        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@Model.Genero.Id" aria-label="Eliminar"><i class="fas fa-trash"></i></a>
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index" aria-label="Volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</section>
+
+<section class="privacy-card">
+    <h3>Descripción</h3>
+    <p class="mb-0">@(string.IsNullOrWhiteSpace(Model.Genero.Descripcion) ? "No hay descripción registrada para este género." : Model.Genero.Descripcion)</p>
+</section>
+
+<section>
+    <div class="section-heading">
+        <span>Películas</span>
+        <h2>Catálogo clasificado</h2>
+    </div>
+    @if (!tienePeliculas)
+    {
+        @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
+        {
+            Icon = "fas fa-film",
+            Title = "Sin películas asociadas",
+            Description = "Aún no registras películas bajo este género dentro del sistema."
+        })
+    }
+    else
+    {
+        <div class="card-grid">
+            @foreach (var pelicula in Model.Peliculas)
+            {
+                <article class="genre-card">
+                    <div class="movie-card-content">
+                        <h3 class="h5 mb-1">@pelicula.Titulo</h3>
+                        <div class="meta-list">
+                            <span><i class="fas fa-calendar"></i>@pelicula.FechaEstreno.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <a class="btn btn-outline-primary btn-sm align-self-start" asp-controller="Peliculas" asp-action="Details" asp-route-id="@pelicula.Id" aria-label="Ver película">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>
