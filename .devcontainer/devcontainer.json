@@ -1,0 +1,22 @@
+{
+    "name": ".NET in Codespaces",
+    "image": "mcr.microsoft.com/dotnet/sdk:8.0",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-dotnettools.csdevkit"
+            ]
+        }
+    },
+    "forwardPorts": [
+        3001,
+        3002
+    ],
+    "hostRequirements": {
+        "memory": "8gb",
+        "cpus": 4
+    },
+    "remoteEnv": {
+        "TARGET": "net8.0"
+    }
+}
