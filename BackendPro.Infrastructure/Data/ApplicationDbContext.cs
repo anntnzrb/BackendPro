@@ -3,12 +3,8 @@ using BackendPro.Core.Entities;
 
 namespace BackendPro.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<Pelicula> Peliculas => Set<Pelicula>();
     public DbSet<Genero> Generos => Set<Genero>();
     public DbSet<Director> Directores => Set<Director>();
@@ -116,7 +112,7 @@ public class ApplicationDbContext : DbContext
                 FechaEstreno = new DateTime(1994, 10, 14),
                 ImagenUrl = "https://image.tmdb.org/t/p/w500/pulp-fiction.jpg",
                 GeneroId = 2,
-                DirectorId = 2
+                DirectorId = 2,
             },
             new Pelicula
             {
@@ -127,7 +123,7 @@ public class ApplicationDbContext : DbContext
                 FechaEstreno = new DateTime(2008, 7, 18),
                 ImagenUrl = "https://image.tmdb.org/t/p/w500/the-dark-knight.jpg",
                 GeneroId = 3,
-                DirectorId = 1
+                DirectorId = 1,
             },
             new Pelicula
             {
@@ -138,7 +134,7 @@ public class ApplicationDbContext : DbContext
                 FechaEstreno = new DateTime(2010, 7, 16),
                 ImagenUrl = "https://image.tmdb.org/t/p/w500/inception.jpg",
                 GeneroId = 1,
-                DirectorId = 1
+                DirectorId = 1,
             },
             new Pelicula
             {
@@ -149,7 +145,7 @@ public class ApplicationDbContext : DbContext
                 FechaEstreno = new DateTime(2006, 10, 6),
                 ImagenUrl = "https://image.tmdb.org/t/p/w500/the-departed.jpg",
                 GeneroId = 2,
-                DirectorId = 3
+                DirectorId = 3,
             },
             new Pelicula
             {
@@ -160,7 +156,7 @@ public class ApplicationDbContext : DbContext
                 FechaEstreno = new DateTime(2003, 10, 10),
                 ImagenUrl = "https://image.tmdb.org/t/p/w500/kill-bill-vol1.jpg",
                 GeneroId = 3,
-                DirectorId = 2
+                DirectorId = 2,
             },
             new Pelicula
             {
@@ -171,7 +167,7 @@ public class ApplicationDbContext : DbContext
                 FechaEstreno = new DateTime(2023, 7, 21),
                 ImagenUrl = "https://image.tmdb.org/t/p/w500/oppenheimer.jpg",
                 GeneroId = 4,
-                DirectorId = 1
+                DirectorId = 1,
             }
         );
 

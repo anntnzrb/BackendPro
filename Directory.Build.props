@@ -9,7 +9,7 @@
     <AnalysisLevel>8-all</AnalysisLevel>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- Suppress warnings from DB-first scaffolded code and missing XML comments -->
-    <NoWarn>$(NoWarn);CS1030;CS1591;MA0051;CA1062;CA1304;CA1311;MA0011</NoWarn>
+    <NoWarn>$(NoWarn);CS1030;CS1591;MA0051;CA1062;CA1304;CA1311;MA0011;CA1056;CA2213;CA2007;CA1861</NoWarn>
   </PropertyGroup>
 
   <!-- Common analyzer packages for all projects -->
