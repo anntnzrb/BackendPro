@@ -1,62 +1,60 @@
+@using System.Linq
 @model IEnumerable<BackendPro.Core.DTOs.ActorDto>
 @{
     ViewData["Title"] = "Actores";
+    var hasActores = Model.Any();
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1><i class="fas fa-users"></i> Actores</h1>
-            <p class="text-muted">Todos los actores registrados en el sistema</p>
-        </div>
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-users"></i> Registro de actores</h2>
+        <p>Perfiles actualizados de todos los intérpretes vinculados a las producciones.</p>
     </div>
+    <div class="toolbar-actions">
+        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-filter me-2"></i>Filtrar</button>
+    </div>
+</section>
 
-    @if (!Model.Any())
+@if (!hasActores)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
     {
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle fa-2x mb-3"></i>
-                    <h4>No hay actores registrados</h4>
-                    <p>El sistema no contiene actores aún. Los datos mostrarán aquí cuando agregues actores al catálogo.</p>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var actor in Model)
+        Icon = "fas fa-users",
+        Title = "No hay actores registrados",
+        Description = "Registra actores para asociarlos a tus películas y enriquecer la información del reparto.",
+        ActionText = "Gestionar actores",
+        ActionUrl = Url.Action("Index", "Actores")
+    })
+}
+else
+{
+    <div class="card-grid">
+        @foreach (var actor in Model)
+        {
+            var nombre = actor.Nombre ?? string.Empty;
+            var initials = string.Join(string.Empty, nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => char.ToUpperInvariant(s[0])));
+            if (string.IsNullOrWhiteSpace(initials))
             {
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-star text-info"></i> @actor.Nombre
-                            </h5>
-                            <p class="card-text">
-                                <small class="text-muted">Nacimiento: @actor.FechaNacimiento.ToString("dd/MM/yyyy")</small>
-                                <br>
-                                @if (!string.IsNullOrEmpty(actor.Biografia))
-                                {
-                                    var biografia = actor.Biografia?.Length > 80 ? actor.Biografia.Substring(0, 80) + "..." : actor.Biografia;
-                                    <small>@biografia</small>
-                                }
-                                else
-                                {
-                                    <small class="text-muted">Sin biografía registrada</small>
-                                }
-                            </p>
-                            
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("Details", "Actores", new { id = actor.Id })" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Detalles
-                                </a>
-                            </div>
+                initials = "A";
+            }
+            var resumen = string.IsNullOrWhiteSpace(actor.Biografia)
+                ? "Sin biografía registrada."
+                : (actor.Biografia.Length > 140 ? actor.Biografia.Substring(0, 140) + "…" : actor.Biografia);
+            <article class="profile-card">
+                <div class="profile-card-body">
+                    <div class="profile-card-header">
+                        <div class="profile-avatar">@initials</div>
+                        <div>
+                            <h3 class="h5 mb-1">@actor.Nombre</h3>
+                            <span class="badge-soft"><i class="fas fa-cake-candles"></i>@actor.FechaNacimiento.ToString("dd/MM/yyyy")</span>
                         </div>
                     </div>
+                    <p class="text-muted mb-0">@resumen</p>
+                    <a class="btn btn-outline-primary btn-sm align-self-start" href="@Url.Action("Details", "Actores", new { id = actor.Id })">
+                        <i class="fas fa-eye me-2"></i>Ver detalle
+                    </a>
                 </div>
-            }
-        </div>
-    }
-</div>
+            </article>
+        }
+    </div>
+}

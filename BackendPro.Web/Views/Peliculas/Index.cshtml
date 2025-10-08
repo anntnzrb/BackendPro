@@ -1,70 +1,76 @@
+@using System.Collections.Generic
+@using System.Linq
 @model IEnumerable<BackendPro.Core.DTOs.PeliculaDto>
 @{
     ViewData["Title"] = "Películas";
+    var hasPeliculas = Model.Any();
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1><i class="fas fa-film"></i> Catálogo de Películas</h1>
-            <p class="text-muted">Todas las películas del sistema</p>
-        </div>
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-film"></i> Catálogo de películas</h2>
+        <p>Consulta y administra todas las producciones registradas en el sistema.</p>
     </div>
+    <div class="toolbar-actions">
+        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-arrow-down-wide-short me-2"></i>Ordenar</button>
+        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-filter me-2"></i>Filtrar</button>
+    </div>
+</section>
 
-    @if (!Model.Any())
+@if (!hasPeliculas)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
     {
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle fa-2x mb-3"></i>
-                    <h4>No hay películas registradas</h4>
-                    <p>El sistema no contiene películas aún. Los datos mostrarán aquí cuando agregues películas al catálogo.</p>
+        Icon = "fas fa-film",
+        Title = "No hay películas registradas",
+        Description = "Cuando agregues nuevas películas al catálogo podrás visualizarlas y consultarlas desde este panel.",
+        ActionText = "Ir al catálogo",
+        ActionUrl = Url.Action("Index", "Peliculas")
+    })
+}
+else
+{
+    <div class="card-grid">
+        @foreach (var pelicula in Model)
+        {
+            var actores = pelicula.Actores?.Where(a => !string.IsNullOrWhiteSpace(a.Nombre)).Take(3).Select(a => a.Nombre).ToList() ?? new List<string>();
+            var sinopsis = string.IsNullOrWhiteSpace(pelicula.Sinopsis)
+                ? "Sin sinopsis disponible."
+                : (pelicula.Sinopsis.Length > 160 ? pelicula.Sinopsis[..160] + "…" : pelicula.Sinopsis);
+            <article class="movie-card">
+                <div class="movie-poster">
+                    @if (!string.IsNullOrWhiteSpace(pelicula.ImagenUrl))
+                    {
+                        <img src="@pelicula.ImagenUrl" alt="@pelicula.Titulo" />
+                    }
+                    else
+                    {
+                        <i class="fas fa-clapperboard"></i>
+                    }
+                    <div class="movie-overlay"></div>
                 </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var pelicula in Model)
-            {
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        @if (!string.IsNullOrEmpty(pelicula.ImagenUrl))
-                        {
-                            <img src="@pelicula.ImagenUrl" class="card-img-top" alt="@pelicula.Titulo" style="height: 200px; object-fit: cover;">
-                        }
-                        else
-                        {
-                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <i class="fas fa-film fa-3x text-white"></i>
-                            </div>
-                        }
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@pelicula.Titulo</h5>
-                            <p class="card-text text-muted small">
-    @{
-        var sinopsis = pelicula.Sinopsis.Length > 100 ? pelicula.Sinopsis.Substring(0, 100) + "..." : pelicula.Sinopsis;
-    }
-    @sinopsis
-</p>
-                            
-                            <div class="mt-auto">
-                                <p class="mb-1"><strong>Duración:</strong> @pelicula.Duracion minutos</p>
-                                <p class="mb-1"><strong>Estreno:</strong> @pelicula.FechaEstreno.ToString("dd/MM/yyyy")</p>
-                                <p class="mb-1"><strong>Género:</strong> @pelicula.Genero.Nombre</p>
-                                <p class="mb-2"><strong>Director:</strong> @pelicula.Director.Nombre</p>
-                                
-                                <div class="btn-group w-100" role="group">
-                                    <a href="@Url.Action("Details", "Peliculas", new { id = pelicula.Id })" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-eye"></i> Detalles
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                <div class="movie-card-content">
+                    <div class="d-flex flex-column gap-2">
+                        <h3 class="h5 mb-0">@pelicula.Titulo</h3>
+                        <p class="text-muted mb-0">@sinopsis</p>
                     </div>
+                    <div class="chip-group">
+                        <span class="chip"><i class="fas fa-tag me-1"></i>@pelicula.Genero.Nombre</span>
+                        <span class="chip"><i class="fas fa-user-tie me-1"></i>@pelicula.Director.Nombre</span>
+                    </div>
+                    <div class="meta-list">
+                        <span><i class="fas fa-clock"></i>@pelicula.Duracion minutos</span>
+                        <span><i class="fas fa-calendar"></i>@pelicula.FechaEstreno.ToString("dd/MM/yyyy")</span>
+                        @if (actores.Any())
+                        {
+                            <span><i class="fas fa-users"></i>@string.Join(", ", actores)</span>
+                        }
+                    </div>
+                    <a class="btn btn-primary btn-sm" href="@Url.Action("Details", "Peliculas", new { id = pelicula.Id })">
+                        <i class="fas fa-eye me-2"></i>Ver detalles
+                    </a>
                 </div>
-            }
-        </div>
-    }
-</div>
+            </article>
+        }
+    </div>
+}

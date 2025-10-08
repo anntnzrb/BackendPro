@@ -1,65 +1,104 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BackendPro.Web</title>
+    <title>@ViewData["Title"] - BackendPro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BackendPro.Web.styles.css" asp-append-version="true" />
+    @RenderSection("PageStyles", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">🎬 BackendPro</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Inicio</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="moviesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-film"></i> Películas
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="moviesDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Peliculas" asp-action="Index">📽️ Ver Películas</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="catalogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-list"></i> Catálogos
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="catalogDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Generos" asp-action="Index">🏷️ Géneros</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Directores" asp-action="Index">🎥 Directores</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Actores" asp-action="Index">🎭 Actores</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+<body class="app-shell">
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    }
+    <header class="app-topbar">
+        <div class="container-fluid px-4 py-3 d-flex align-items-center justify-content-between">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span><i class="fas fa-clapperboard"></i> BackendPro</span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <div class="quick-actions d-none d-md-flex">
+                    <a class="btn btn-outline-light btn-sm" asp-area="" asp-controller="Peliculas" asp-action="Index"><i class="fas fa-film me-2"></i>Películas</a>
+                    <a class="btn btn-outline-light btn-sm" asp-area="" asp-controller="Generos" asp-action="Index"><i class="fas fa-tag me-2"></i>Géneros</a>
+                    <a class="btn btn-outline-light btn-sm" asp-area="" asp-controller="Actores" asp-action="Index"><i class="fas fa-users me-2"></i>Actores</a>
                 </div>
+                <button class="btn btn-light btn-sm d-lg-none" type="button" id="sidebarToggle" aria-label="Mostrar menú">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-        </nav>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
+    <div class="app-body">
+        <aside class="app-sidebar" id="appSidebar">
+            <div>
+                <div class="app-sidebar-title">Principal</div>
+                <nav class="app-menu">
+                    <a class="menu-link @(currentController == "Home" ? "active" : string.Empty)" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-gauge"></i><span>Panel general</span></a>
+                    <a class="menu-link @(currentController == "Peliculas" ? "active" : string.Empty)" asp-area="" asp-controller="Peliculas" asp-action="Index"><i class="fas fa-film"></i><span>Películas</span></a>
+                </nav>
+            </div>
+            <div>
+                <div class="app-sidebar-title">Catálogos</div>
+                <nav class="app-menu">
+                    <a class="menu-link @(currentController == "Generos" ? "active" : string.Empty)" asp-area="" asp-controller="Generos" asp-action="Index"><i class="fas fa-tags"></i><span>Géneros</span></a>
+                    <a class="menu-link @(currentController == "Directores" ? "active" : string.Empty)" asp-area="" asp-controller="Directores" asp-action="Index"><i class="fas fa-user-tie"></i><span>Directores</span></a>
+                    <a class="menu-link @(currentController == "Actores" ? "active" : string.Empty)" asp-area="" asp-controller="Actores" asp-action="Index"><i class="fas fa-users"></i><span>Actores</span></a>
+                </nav>
+            </div>
+        </aside>
+        <main class="app-main">
+            <div class="app-container">
+                @RenderBody()
+            </div>
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BackendPro.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="app-footer">
+        <div class="app-container footer-inner">
+            <span>&copy; @DateTime.UtcNow.Year BackendPro</span>
+            <a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
         </div>
     </footer>
+    <div class="overlay" id="sidebarOverlay"></div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('appSidebar');
+            const toggle = document.getElementById('sidebarToggle');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (!sidebar || !toggle || !overlay) {
+                return;
+            }
+            const closeSidebar = () => {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+            };
+            const openSidebar = () => {
+                sidebar.classList.add('show');
+                overlay.classList.add('show');
+            };
+            toggle.addEventListener('click', () => {
+                if (sidebar.classList.contains('show')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+            overlay.addEventListener('click', closeSidebar);
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 992) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

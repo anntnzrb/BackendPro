@@ -1,54 +1,59 @@
+@using System.Linq
 @model IEnumerable<BackendPro.Core.DTOs.DirectorDto>
 @{
     ViewData["Title"] = "Directores";
+    var hasDirectores = Model.Any();
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1><i class="fas fa-user-tie"></i> Directores</h1>
-            <p class="text-muted">Todos los directores registrados en el sistema</p>
-        </div>
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-user-tie"></i> Directores</h2>
+        <p>Listado de directores con nacionalidad y fecha de nacimiento registrada.</p>
     </div>
+    <div class="toolbar-actions">
+        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-magnifying-glass me-2"></i>Buscar</button>
+    </div>
+</section>
 
-    @if (!Model.Any())
+@if (!hasDirectores)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
     {
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle fa-2x mb-3"></i>
-                    <h4>No hay directores registrados</h4>
-                    <p>El sistema no contiene directores aún. Los datos mostrarán aquí cuando agregues directores al catálogo.</p>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var director in Model)
+        Icon = "fas fa-user-tie",
+        Title = "No hay directores registrados",
+        Description = "Crea directores para completar las fichas técnicas de tus películas.",
+        ActionText = "Gestionar directores",
+        ActionUrl = Url.Action("Index", "Directores")
+    })
+}
+else
+{
+    <div class="card-grid">
+        @foreach (var director in Model)
+        {
+            var nombre = director.Nombre ?? string.Empty;
+            var initials = string.Join(string.Empty, nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => char.ToUpperInvariant(s[0])));
+            if (string.IsNullOrWhiteSpace(initials))
             {
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-user-tie text-warning"></i> @director.Nombre
-                            </h5>
-                            <p class="card-text">
-                                <span class="badge bg-secondary">@director.Nacionalidad</span>
-                                <br>
-                                <small class="text-muted">Nacimiento: @director.FechaNacimiento.ToString("dd/MM/yyyy")</small>
-                            </p>
-                            
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("Details", "Directores", new { id = director.Id })" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Detalles
-                                </a>
-                            </div>
+                initials = "D";
+            }
+            <article class="profile-card">
+                <div class="profile-card-body">
+                    <div class="profile-card-header">
+                        <div class="profile-avatar">@initials</div>
+                        <div>
+                            <h3 class="h5 mb-1">@director.Nombre</h3>
+                            <span class="badge-soft"><i class="fas fa-flag"></i>@director.Nacionalidad</span>
                         </div>
                     </div>
+                    <div class="meta-list">
+                        <span><i class="fas fa-calendar-day"></i>Nacimiento: @director.FechaNacimiento.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    <a class="btn btn-outline-primary btn-sm align-self-start" href="@Url.Action("Details", "Directores", new { id = director.Id })">
+                        <i class="fas fa-eye me-2"></i>Ver detalle
+                    </a>
                 </div>
-            }
-        </div>
-    }
-</div>
+            </article>
+        }
+    </div>
+}

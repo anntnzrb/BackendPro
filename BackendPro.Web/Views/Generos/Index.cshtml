@@ -1,53 +1,50 @@
 @model IEnumerable<BackendPro.Core.DTOs.GeneroDto>
 @{
     ViewData["Title"] = "Géneros";
+    var hasGeneros = Model.Any();
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1><i class="fas fa-tags"></i> Géneros Cinematográficos</h1>
-            <p class="text-muted">Todos los géneros disponibles en el sistema</p>
-        </div>
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-tags"></i> Géneros cinematográficos</h2>
+        <p>Organiza y clasifica tus películas por categorías consistentes.</p>
     </div>
+    <div class="toolbar-actions">
+        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-plus me-2"></i>Nuevo género</button>
+    </div>
+</section>
 
-    @if (!Model.Any())
+@if (!hasGeneros)
+{
+    @await Html.PartialAsync("_EmptyState", new BackendPro.Web.Models.EmptyStateViewModel
     {
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle fa-2x mb-3"></i>
-                    <h4>No hay géneros registrados</h4>
-                    <p>El sistema no contiene géneros aún. Los datos mostrarán aquí cuando agregues géneros al catálogo.</p>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var genero in Model)
-            {
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-tag text-primary"></i> @genero.Nombre
-                            </h5>
-                            @if (!string.IsNullOrEmpty(genero.Descripcion))
-                            {
-                                <p class="card-text text-muted">@genero.Descripcion</p>
-                            }
-                            
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("Details", "Generos", new { id = genero.Id })" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Detalles
-                                </a>
-                            </div>
-                        </div>
+        Icon = "fas fa-tags",
+        Title = "No hay géneros registrados",
+        Description = "Configura géneros para facilitar la clasificación y filtrado de tus películas.",
+        ActionText = "Gestionar géneros",
+        ActionUrl = Url.Action("Index", "Generos")
+    })
+}
+else
+{
+    <div class="card-grid">
+        @foreach (var genero in Model)
+        {
+            var descripcion = string.IsNullOrWhiteSpace(genero.Descripcion)
+                ? "Sin descripción disponible."
+                : (genero.Descripcion.Length > 160 ? genero.Descripcion.Substring(0, 160) + "…" : genero.Descripcion);
+            <article class="genre-card">
+                <div class="movie-card-content">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h3 class="h5 mb-0"><i class="fas fa-tag me-2 text-primary"></i>@genero.Nombre</h3>
+                        <span class="badge-soft"><i class="fas fa-hashtag"></i>@genero.Id</span>
                     </div>
+                    <p class="text-muted mb-0">@descripcion</p>
+                    <a class="btn btn-outline-primary btn-sm align-self-start" href="@Url.Action("Details", "Generos", new { id = genero.Id })">
+                        <i class="fas fa-eye me-2"></i>Ver detalle
+                    </a>
                 </div>
-            }
-        </div>
-    }
-</div>
+            </article>
+        }
+    </div>
+}
