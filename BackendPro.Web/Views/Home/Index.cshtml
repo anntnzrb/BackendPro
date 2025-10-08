@@ -1,8 +1,101 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model BackendPro.Web.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Sistema de Gestión de Películas";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="display-4">🎬 BackendPro - Sistema de Películas</h1>
+            <p class="lead">Gestión completa de películas, géneros, directores y actores</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-film fa-3x mb-2"></i>
+                    <h5 class="card-title">Películas</h5>
+                    <h2>@Model.TotalPeliculas</h2>
+                    <a href="/Peliculas" class="btn btn-light btn-sm">Ver Películas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-tags fa-3x mb-2"></i>
+                    <h5 class="card-title">Géneros</h5>
+                    <h2>@Model.TotalGeneros</h2>
+                    <a href="/Generos" class="btn btn-light btn-sm">Ver Géneros</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-tie fa-3x mb-2"></i>
+                    <h5 class="card-title">Directores</h5>
+                    <h2>@Model.TotalDirectores</h2>
+                    <a href="/Directores" class="btn btn-light btn-sm">Ver Directores</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-2"></i>
+                    <h5 class="card-title">Actores</h5>
+                    <h2>@Model.TotalActores</h2>
+                    <a href="/Actores" class="btn btn-light btn-sm">Ver Actores</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-cog"></i> Navegación Rápida</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Gestión de Contenido</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="/Peliculas" class="text-decoration-none">📽️ Ver todas las películas</a></li>
+                                <li><a href="/Generos" class="text-decoration-none">🏷️ Administrar géneros cinematográficos</a></li>
+                                <li><a href="/Directores" class="text-decoration-none">🎥 Gestión de directores</a></li>
+                                <li><a href="/Actores" class="text-decoration-none">🎭 Registro de actores</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Características del Sistema</h5>
+                            <ul class="list-unstyled">
+                                <li>✅ Relación muchos-a-muchos entre películas y actores</li>
+                                <li>✅ Base de datos SQLite con Entity Framework Core</li>
+                                <li>✅ Arquitectura limpia (Clean Architecture)</li>
+                                <li>✅ API RESTful con ASP.NET Core MVC</li>
+                                <li>✅ Soporte paraMULTILINGÜE (ESP/ENG)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.TotalPeliculas == 0)
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h5><i class="fas fa-info-circle"></i> ¡Bienvenido!</h5>
+                    <p>El sistema está listo para usar. Comienza agregando géneros, directores y actores antes de crear tu primera película.</p>
+                </div>
+            </div>
+        </div>
+    }
 </div>

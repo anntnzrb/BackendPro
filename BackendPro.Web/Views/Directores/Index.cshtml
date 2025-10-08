@@ -1,0 +1,54 @@
+@model IEnumerable<BackendPro.Core.DTOs.DirectorDto>
+@{
+    ViewData["Title"] = "Directores";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fas fa-user-tie"></i> Directores</h1>
+            <p class="text-muted">Todos los directores registrados en el sistema</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle fa-2x mb-3"></i>
+                    <h4>No hay directores registrados</h4>
+                    <p>El sistema no contiene directores aún. Los datos mostrarán aquí cuando agregues directores al catálogo.</p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var director in Model)
+            {
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-user-tie text-warning"></i> @director.Nombre
+                            </h5>
+                            <p class="card-text">
+                                <span class="badge bg-secondary">@director.Nacionalidad</span>
+                                <br>
+                                <small class="text-muted">Nacimiento: @director.FechaNacimiento.ToString("dd/MM/yyyy")</small>
+                            </p>
+                            
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("Details", "Directores", new { id = director.Id })" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,62 @@
+@model IEnumerable<BackendPro.Core.DTOs.ActorDto>
+@{
+    ViewData["Title"] = "Actores";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fas fa-users"></i> Actores</h1>
+            <p class="text-muted">Todos los actores registrados en el sistema</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle fa-2x mb-3"></i>
+                    <h4>No hay actores registrados</h4>
+                    <p>El sistema no contiene actores aún. Los datos mostrarán aquí cuando agregues actores al catálogo.</p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var actor in Model)
+            {
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-star text-info"></i> @actor.Nombre
+                            </h5>
+                            <p class="card-text">
+                                <small class="text-muted">Nacimiento: @actor.FechaNacimiento.ToString("dd/MM/yyyy")</small>
+                                <br>
+                                @if (!string.IsNullOrEmpty(actor.Biografia))
+                                {
+                                    var biografia = actor.Biografia?.Length > 80 ? actor.Biografia.Substring(0, 80) + "..." : actor.Biografia;
+                                    <small>@biografia</small>
+                                }
+                                else
+                                {
+                                    <small class="text-muted">Sin biografía registrada</small>
+                                }
+                            </p>
+                            
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("Details", "Actores", new { id = actor.Id })" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
