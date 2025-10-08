@@ -10,7 +10,7 @@
         <p>Organiza y clasifica tus películas por categorías consistentes.</p>
     </div>
     <div class="toolbar-actions">
-        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-plus me-2"></i>Nuevo género</button>
+        <a class="btn btn-primary btn-sm" asp-action="Create"><i class="fas fa-plus me-2"></i>Nuevo género</a>
     </div>
 </section>
 
@@ -40,9 +40,11 @@ else
                         <span class="badge-soft"><i class="fas fa-hashtag"></i>@genero.Id</span>
                     </div>
                     <p class="text-muted mb-0">@descripcion</p>
-                    <a class="btn btn-outline-primary btn-sm align-self-start" href="@Url.Action("Details", "Generos", new { id = genero.Id })">
-                        <i class="fas fa-eye me-2"></i>Ver detalle
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@genero.Id"><i class="fas fa-eye me-2"></i>Ver detalle</a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@genero.Id"><i class="fas fa-pen me-2"></i>Editar</a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@genero.Id"><i class="fas fa-trash me-2"></i>Eliminar</a>
+                    </div>
                 </div>
             </article>
         }
