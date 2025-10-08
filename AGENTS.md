@@ -65,6 +65,11 @@ Watch mode: `dotnet watch --project BackendPro.Web`
 
 .NET 8, ASP.NET Core MVC, nullable reference types enabled, implicit usings enabled.
 
+## Localization
+
+**Code:** English (variables, methods, classes, comments, commit messages)
+**User-Facing:** Spanish (UI text, labels, messages, validation errors, views)
+
 ## Database Strategy
 
 **Development:** SQLite for local development (lightweight, no setup required)
