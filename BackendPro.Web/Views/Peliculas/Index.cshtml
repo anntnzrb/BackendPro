@@ -12,6 +12,7 @@
         <p>Consulta y administra todas las producciones registradas en el sistema.</p>
     </div>
     <div class="toolbar-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Create"><i class="fas fa-plus me-2"></i>Nueva película</a>
         <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-arrow-down-wide-short me-2"></i>Ordenar</button>
         <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-filter me-2"></i>Filtrar</button>
     </div>
@@ -66,9 +67,17 @@ else
                             <span><i class="fas fa-users"></i>@string.Join(", ", actores)</span>
                         }
                     </div>
-                    <a class="btn btn-primary btn-sm" href="@Url.Action("Details", "Peliculas", new { id = pelicula.Id })">
-                        <i class="fas fa-eye me-2"></i>Ver detalles
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@pelicula.Id">
+                            <i class="fas fa-eye me-2"></i>Ver detalles
+                        </a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@pelicula.Id">
+                            <i class="fas fa-pen me-2"></i>Editar
+                        </a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@pelicula.Id">
+                            <i class="fas fa-trash me-2"></i>Eliminar
+                        </a>
+                    </div>
                 </div>
             </article>
         }

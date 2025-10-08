@@ -1,0 +1,60 @@
+@model BackendPro.Web.Models.PeliculaFormViewModel
+
+<input asp-for="Id" type="hidden" />
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Titulo" class="form-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Duracion" class="form-label"></label>
+                <input asp-for="Duracion" class="form-control" />
+                <span asp-validation-for="Duracion" class="text-danger"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="FechaEstreno" class="form-label"></label>
+                <input asp-for="FechaEstreno" class="form-control" />
+                <span asp-validation-for="FechaEstreno" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mt-3">
+            <label asp-for="Sinopsis" class="form-label"></label>
+            <textarea asp-for="Sinopsis" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Sinopsis" class="text-danger"></span>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-md-6">
+                <label asp-for="GeneroId" class="form-label"></label>
+                <select asp-for="GeneroId" asp-items="Model.Generos" class="form-select">
+                    <option value="">Selecciona un género</option>
+                </select>
+                <span asp-validation-for="GeneroId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="DirectorId" class="form-label"></label>
+                <select asp-for="DirectorId" asp-items="Model.Directores" class="form-select">
+                    <option value="">Selecciona un director</option>
+                </select>
+                <span asp-validation-for="DirectorId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-md-6">
+                <label asp-for="ImagenUrl" class="form-label"></label>
+                <input asp-for="ImagenUrl" class="form-control" />
+                <span asp-validation-for="ImagenUrl" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="ActorIds" class="form-label"></label>
+                <select asp-for="ActorIds" asp-items="Model.Actores" class="form-select" multiple size="6"></select>
+                <span class="form-text">Mantén presionada la tecla Ctrl (Cmd en Mac) para seleccionar múltiples intérpretes.</span>
+                <span asp-validation-for="ActorIds" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</div>

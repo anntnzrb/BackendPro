@@ -10,6 +10,8 @@
         <p>Ficha técnica completa de la película seleccionada.</p>
     </div>
     <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@Model.Id"><i class="fas fa-pen me-2"></i>Editar</a>
+        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@Model.Id"><i class="fas fa-trash me-2"></i>Eliminar</a>
         <a class="btn btn-outline-secondary btn-sm" asp-action="Index"><i class="fas fa-arrow-left me-2"></i>Volver</a>
     </div>
 </section>
