@@ -10,6 +10,7 @@ public class HomeController(ApplicationDbContext context) : Controller
 {
     private readonly ApplicationDbContext _context = context;
 
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         var stats = new HomeViewModel
@@ -23,6 +24,7 @@ public class HomeController(ApplicationDbContext context) : Controller
         return View(stats);
     }
 
+    [HttpGet]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
