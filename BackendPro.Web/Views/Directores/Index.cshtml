@@ -11,6 +11,7 @@
         <p>Listado de directores con nacionalidad y fecha de nacimiento registrada.</p>
     </div>
     <div class="toolbar-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Create"><i class="fas fa-plus me-2"></i>Nuevo director</a>
         <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-magnifying-glass me-2"></i>Buscar</button>
     </div>
 </section>
@@ -49,9 +50,11 @@ else
                     <div class="meta-list">
                         <span><i class="fas fa-calendar-day"></i>Nacimiento: @director.FechaNacimiento.ToString("dd/MM/yyyy")</span>
                     </div>
-                    <a class="btn btn-outline-primary btn-sm align-self-start" href="@Url.Action("Details", "Directores", new { id = director.Id })">
-                        <i class="fas fa-eye me-2"></i>Ver detalle
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@director.Id"><i class="fas fa-eye me-2"></i>Ver detalle</a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@director.Id"><i class="fas fa-pen me-2"></i>Editar</a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@director.Id"><i class="fas fa-trash me-2"></i>Eliminar</a>
+                    </div>
                 </div>
             </article>
         }
