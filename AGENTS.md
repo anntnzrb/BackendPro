@@ -45,6 +45,8 @@ Three-layer Clean Architecture following dependency rule: Web → Infrastructure
 - Data access code only in Infrastructure
 - Controllers delegate to Core services, no direct business logic
 - No EF Core or framework references in Core
+- Raw SQL commands are prohibited; use EF Core abstractions only
+- Always express LINQ with method syntax (`Where`, `Select`, etc.); query syntax (`from ... in ... select ...`) is discouraged and should not be used
 
 ## Development Workflows
 
