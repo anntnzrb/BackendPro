@@ -6,25 +6,18 @@ using BackendPro.Infrastructure.Data;
 
 namespace BackendPro.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(ApplicationDbContext context) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly ApplicationDbContext _context;
-
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
-    {
-        _logger = logger;
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     public async Task<IActionResult> Index()
     {
         var stats = new HomeViewModel
         {
-            TotalPeliculas = await _context.Peliculas.CountAsync(),
-            TotalGeneros = await _context.Generos.CountAsync(),
-            TotalDirectores = await _context.Directores.CountAsync(),
-            TotalActores = await _context.Actores.CountAsync()
+            TotalPeliculas = await _context.Peliculas.CountAsync().ConfigureAwait(false),
+            TotalGeneros = await _context.Generos.CountAsync().ConfigureAwait(false),
+            TotalDirectores = await _context.Directores.CountAsync().ConfigureAwait(false),
+            TotalActores = await _context.Actores.CountAsync().ConfigureAwait(false),
         };
 
         return View(stats);

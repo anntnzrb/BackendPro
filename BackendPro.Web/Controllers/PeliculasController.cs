@@ -5,14 +5,9 @@ using BackendPro.Infrastructure.Data;
 
 namespace BackendPro.Web.Controllers;
 
-public class PeliculasController : Controller
+public class PeliculasController(ApplicationDbContext context) : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public PeliculasController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     // GET: Peliculas
     public async Task<IActionResult> Index()
@@ -22,7 +17,7 @@ public class PeliculasController : Controller
             .Include(p => p.Director)
             .Include(p => p.PeliculasActor)
                 .ThenInclude(pa => pa.Actor)
-            .ToListAsync();
+            .ToListAsync().ConfigureAwait(false);
 
         var peliculasDto = peliculas.Select(p => new PeliculaDto
         {
@@ -36,22 +31,22 @@ public class PeliculasController : Controller
             {
                 Id = p.Genero.Id,
                 Nombre = p.Genero.Nombre,
-                Descripcion = p.Genero.Descripcion
+                Descripcion = p.Genero.Descripcion,
             },
             Director = new DirectorDto
             {
                 Id = p.Director.Id,
                 Nombre = p.Director.Nombre,
                 Nacionalidad = p.Director.Nacionalidad,
-                FechaNacimiento = p.Director.FechaNacimiento
+                FechaNacimiento = p.Director.FechaNacimiento,
             },
             Actores = p.PeliculasActor.Select(pa => new ActorDto
             {
                 Id = pa.Actor.Id,
                 Nombre = pa.Actor.Nombre,
                 Biografia = pa.Actor.Biografia,
-                FechaNacimiento = pa.Actor.FechaNacimiento
-            }).ToList()
+                FechaNacimiento = pa.Actor.FechaNacimiento,
+            }).ToList(),
         }).ToList();
 
         return View(peliculasDto);
@@ -70,7 +65,7 @@ public class PeliculasController : Controller
             .Include(p => p.Director)
             .Include(p => p.PeliculasActor)
                 .ThenInclude(pa => pa.Actor)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
 
         if (pelicula == null)
         {
@@ -89,22 +84,22 @@ public class PeliculasController : Controller
             {
                 Id = pelicula.Genero.Id,
                 Nombre = pelicula.Genero.Nombre,
-                Descripcion = pelicula.Genero.Descripcion
+                Descripcion = pelicula.Genero.Descripcion,
             },
             Director = new DirectorDto
             {
                 Id = pelicula.Director.Id,
                 Nombre = pelicula.Director.Nombre,
                 Nacionalidad = pelicula.Director.Nacionalidad,
-                FechaNacimiento = pelicula.Director.FechaNacimiento
+                FechaNacimiento = pelicula.Director.FechaNacimiento,
             },
             Actores = pelicula.PeliculasActor.Select(pa => new ActorDto
             {
                 Id = pa.Actor.Id,
                 Nombre = pa.Actor.Nombre,
                 Biografia = pa.Actor.Biografia,
-                FechaNacimiento = pa.Actor.FechaNacimiento
-            }).ToList()
+                FechaNacimiento = pa.Actor.FechaNacimiento,
+            }).ToList(),
         };
 
         return View(peliculaDto);

@@ -6,26 +6,21 @@ using BackendPro.Web.Models;
 
 namespace BackendPro.Web.Controllers;
 
-public class DirectoresController : Controller
+public class DirectoresController(ApplicationDbContext context) : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public DirectoresController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     // GET: Directores
     public async Task<IActionResult> Index()
     {
-        var directores = await _context.Directores.ToListAsync();
-        
+        var directores = await _context.Directores.ToListAsync().ConfigureAwait(false);
+
         var directoresDto = directores.Select(d => new DirectorDto
         {
             Id = d.Id,
             Nombre = d.Nombre,
             Nacionalidad = d.Nacionalidad,
-            FechaNacimiento = d.FechaNacimiento
+            FechaNacimiento = d.FechaNacimiento,
         }).ToList();
 
         return View(directoresDto);
@@ -42,7 +37,7 @@ public class DirectoresController : Controller
         var director = await _context.Directores
             .Include(d => d.Peliculas)
                 .ThenInclude(p => p.Genero)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
 
         if (director == null)
         {
@@ -54,7 +49,7 @@ public class DirectoresController : Controller
             Id = director.Id,
             Nombre = director.Nombre,
             Nacionalidad = director.Nacionalidad,
-            FechaNacimiento = director.FechaNacimiento
+            FechaNacimiento = director.FechaNacimiento,
         };
 
         var peliculas = director.Peliculas
@@ -64,14 +59,14 @@ public class DirectoresController : Controller
                 Id = p.Id,
                 Titulo = p.Titulo,
                 FechaEstreno = p.FechaEstreno,
-                Genero = p.Genero.Nombre
+                Genero = p.Genero.Nombre,
             })
             .ToList();
 
         var viewModel = new DirectorDetailsViewModel
         {
             Director = directorDto,
-            Peliculas = peliculas
+            Peliculas = peliculas,
         };
 
         return View(viewModel);

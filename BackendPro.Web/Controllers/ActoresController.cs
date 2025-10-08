@@ -6,26 +6,21 @@ using BackendPro.Web.Models;
 
 namespace BackendPro.Web.Controllers;
 
-public class ActoresController : Controller
+public class ActoresController(ApplicationDbContext context) : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public ActoresController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     // GET: Actores
     public async Task<IActionResult> Index()
     {
-        var actores = await _context.Actores.ToListAsync();
-        
+        var actores = await _context.Actores.ToListAsync().ConfigureAwait(false);
+
         var actoresDto = actores.Select(a => new ActorDto
         {
             Id = a.Id,
             Nombre = a.Nombre,
             Biografia = a.Biografia,
-            FechaNacimiento = a.FechaNacimiento
+            FechaNacimiento = a.FechaNacimiento,
         }).ToList();
 
         return View(actoresDto);
@@ -43,7 +38,7 @@ public class ActoresController : Controller
             .Include(a => a.PeliculasActor)
                 .ThenInclude(pa => pa.Pelicula)
                     .ThenInclude(p => p.Genero)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
 
         if (actor == null)
         {
@@ -55,7 +50,7 @@ public class ActoresController : Controller
             Id = actor.Id,
             Nombre = actor.Nombre,
             Biografia = actor.Biografia,
-            FechaNacimiento = actor.FechaNacimiento
+            FechaNacimiento = actor.FechaNacimiento,
         };
 
         var peliculas = actor.PeliculasActor
@@ -68,14 +63,14 @@ public class ActoresController : Controller
                 Id = p.Id,
                 Titulo = p.Titulo,
                 FechaEstreno = p.FechaEstreno,
-                Genero = p.Genero.Nombre
+                Genero = p.Genero.Nombre,
             })
             .ToList();
 
         var viewModel = new ActorDetailsViewModel
         {
             Actor = actorDto,
-            Peliculas = peliculas
+            Peliculas = peliculas,
         };
 
         return View(viewModel);

@@ -6,25 +6,20 @@ using BackendPro.Web.Models;
 
 namespace BackendPro.Web.Controllers;
 
-public class GenerosController : Controller
+public class GenerosController(ApplicationDbContext context) : Controller
 {
-    private readonly ApplicationDbContext _context;
-
-    public GenerosController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ApplicationDbContext _context = context;
 
     // GET: Generos
     public async Task<IActionResult> Index()
     {
-        var generos = await _context.Generos.ToListAsync();
-        
+        var generos = await _context.Generos.ToListAsync().ConfigureAwait(false);
+
         var generosDto = generos.Select(g => new GeneroDto
         {
             Id = g.Id,
             Nombre = g.Nombre,
-            Descripcion = g.Descripcion
+            Descripcion = g.Descripcion,
         }).ToList();
 
         return View(generosDto);
@@ -41,7 +36,7 @@ public class GenerosController : Controller
         var genero = await _context.Generos
             .Include(g => g.Peliculas)
                 .ThenInclude(p => p.Director)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
 
         if (genero == null)
         {
@@ -52,7 +47,7 @@ public class GenerosController : Controller
         {
             Id = genero.Id,
             Nombre = genero.Nombre,
-            Descripcion = genero.Descripcion
+            Descripcion = genero.Descripcion,
         };
 
         var peliculas = genero.Peliculas
@@ -62,14 +57,14 @@ public class GenerosController : Controller
                 Id = p.Id,
                 Titulo = p.Titulo,
                 FechaEstreno = p.FechaEstreno,
-                Genero = genero.Nombre
+                Genero = genero.Nombre,
             })
             .ToList();
 
         var viewModel = new GeneroDetailsViewModel
         {
             Genero = generoDto,
-            Peliculas = peliculas
+            Peliculas = peliculas,
         };
 
         return View(viewModel);
