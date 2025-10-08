@@ -11,6 +11,7 @@
         <p>Perfiles actualizados de todos los intérpretes vinculados a las producciones.</p>
     </div>
     <div class="toolbar-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Create"><i class="fas fa-plus me-2"></i>Nuevo actor</a>
         <button class="btn btn-outline-secondary btn-sm" type="button"><i class="fas fa-filter me-2"></i>Filtrar</button>
     </div>
 </section>
@@ -50,9 +51,11 @@ else
                         </div>
                     </div>
                     <p class="text-muted mb-0">@resumen</p>
-                    <a class="btn btn-outline-primary btn-sm align-self-start" href="@Url.Action("Details", "Actores", new { id = actor.Id })">
-                        <i class="fas fa-eye me-2"></i>Ver detalle
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@actor.Id"><i class="fas fa-eye me-2"></i>Ver detalle</a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@actor.Id"><i class="fas fa-pen me-2"></i>Editar</a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@actor.Id"><i class="fas fa-trash me-2"></i>Eliminar</a>
+                    </div>
                 </div>
             </article>
         }
