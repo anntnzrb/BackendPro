@@ -1,9 +1,8 @@
 namespace BackendPro.Core.DTOs;
 
-public class ActorDto
+public class CreateDirectorDto
 {
-    public int Id { get; set; }
     public string Nombre { get; set; } = string.Empty;
-    public string? Biografia { get; set; }
+    public string Nacionalidad { get; set; } = string.Empty;
     public DateTime FechaNacimiento { get; set; }
 }
