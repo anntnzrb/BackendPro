@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendPro.Core.DTOs;
 using BackendPro.Infrastructure.Data;
+using BackendPro.Web.Models;
 
 namespace BackendPro.Web.Controllers;
 
@@ -41,6 +42,7 @@ public class ActoresController : Controller
         var actor = await _context.Actores
             .Include(a => a.PeliculasActor)
                 .ThenInclude(pa => pa.Pelicula)
+                    .ThenInclude(p => p.Genero)
             .FirstOrDefaultAsync(m => m.Id == id);
 
         if (actor == null)
@@ -56,6 +58,26 @@ public class ActoresController : Controller
             FechaNacimiento = actor.FechaNacimiento
         };
 
-        return View(actorDto);
+        var peliculas = actor.PeliculasActor
+            .Where(pa => pa.Pelicula != null)
+            .Select(pa => pa.Pelicula!)
+            .Distinct()
+            .OrderByDescending(p => p.FechaEstreno)
+            .Select(p => new PeliculaSummaryViewModel
+            {
+                Id = p.Id,
+                Titulo = p.Titulo,
+                FechaEstreno = p.FechaEstreno,
+                Genero = p.Genero.Nombre
+            })
+            .ToList();
+
+        var viewModel = new ActorDetailsViewModel
+        {
+            Actor = actorDto,
+            Peliculas = peliculas
+        };
+
+        return View(viewModel);
     }
 }

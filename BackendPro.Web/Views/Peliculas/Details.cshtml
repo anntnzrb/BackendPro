@@ -1,0 +1,53 @@
+@model BackendPro.Core.DTOs.PeliculaDto
+@{
+    ViewData["Title"] = Model.Titulo;
+    var actores = Model.Actores.Where(a => !string.IsNullOrWhiteSpace(a.Nombre)).ToList();
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-clapperboard"></i> @Model.Titulo</h2>
+        <p>Ficha técnica completa de la película seleccionada.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index"><i class="fas fa-arrow-left me-2"></i>Volver</a>
+    </div>
+</section>
+
+<section class="movie-card" style="flex-direction: row; overflow: hidden;">
+    <div class="movie-poster" style="flex: 0 0 320px;">
+        @if (!string.IsNullOrWhiteSpace(Model.ImagenUrl))
+        {
+            <img src="@Model.ImagenUrl" alt="@Model.Titulo" />
+        }
+        else
+        {
+            <i class="fas fa-film"></i>
+        }
+        <div class="movie-overlay"></div>
+    </div>
+    <div class="movie-card-content" style="flex: 1;">
+        <div class="chip-group">
+            <span class="chip"><i class="fas fa-tag me-1"></i>@Model.Genero.Nombre</span>
+            <span class="chip"><i class="fas fa-user-tie me-1"></i>@Model.Director.Nombre</span>
+            <span class="chip"><i class="fas fa-calendar me-1"></i>@Model.FechaEstreno.ToString("dd/MM/yyyy")</span>
+        </div>
+        <p class="text-muted">@Model.Sinopsis</p>
+        <div class="meta-list">
+            <span><i class="fas fa-clock"></i>@Model.Duracion minutos</span>
+            <span><i class="fas fa-passport"></i>@Model.Director.Nacionalidad</span>
+        </div>
+        @if (actores.Any())
+        {
+            <div>
+                <h4 class="mt-3 mb-2">Reparto destacado</h4>
+                <div class="chip-group">
+                    @foreach (var actor in actores)
+                    {
+                        <a class="chip" asp-controller="Actores" asp-action="Details" asp-route-id="@actor.Id"><i class="fas fa-user me-1"></i>@actor.Nombre</a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>

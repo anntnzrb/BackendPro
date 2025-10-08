@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendPro.Core.DTOs;
 using BackendPro.Infrastructure.Data;
+using BackendPro.Web.Models;
 
 namespace BackendPro.Web.Controllers;
 
@@ -39,6 +40,8 @@ public class DirectoresController : Controller
         }
 
         var director = await _context.Directores
+            .Include(d => d.Peliculas)
+                .ThenInclude(p => p.Genero)
             .FirstOrDefaultAsync(m => m.Id == id);
 
         if (director == null)
@@ -54,6 +57,23 @@ public class DirectoresController : Controller
             FechaNacimiento = director.FechaNacimiento
         };
 
-        return View(directorDto);
+        var peliculas = director.Peliculas
+            .OrderByDescending(p => p.FechaEstreno)
+            .Select(p => new PeliculaSummaryViewModel
+            {
+                Id = p.Id,
+                Titulo = p.Titulo,
+                FechaEstreno = p.FechaEstreno,
+                Genero = p.Genero.Nombre
+            })
+            .ToList();
+
+        var viewModel = new DirectorDetailsViewModel
+        {
+            Director = directorDto,
+            Peliculas = peliculas
+        };
+
+        return View(viewModel);
     }
 }
