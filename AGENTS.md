@@ -64,3 +64,10 @@ Watch mode: `dotnet watch --project BackendPro.Web`
 ## Technology Stack
 
 .NET 8, ASP.NET Core MVC, nullable reference types enabled, implicit usings enabled.
+
+## Database Strategy
+
+**Development:** SQLite for local development (lightweight, no setup required)
+**Production:** SQL Server (target database for final deployment)
+
+Design with provider-agnostic EF Core patterns to ensure smooth migration from SQLite to SQL Server.
