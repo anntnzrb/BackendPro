@@ -48,9 +48,11 @@ Three-layer Clean Architecture following dependency rule: Web → Infrastructure
 
 ## Development Workflows
 
-Build: `dotnet build BackendPro.sln`
-Run: `dotnet run --project BackendPro.Web`
-Watch mode: `dotnet watch --project BackendPro.Web`
+**Note:** Use `dotnet.exe` instead of `dotnet` for all commands.
+
+Build: `dotnet.exe build BackendPro.sln`
+Run: `dotnet.exe run --project BackendPro.Web`
+Watch mode: `dotnet.exe watch --project BackendPro.Web`
 
 ## Feature Development Flow
 
