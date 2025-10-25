@@ -5,10 +5,28 @@ Sistema de gestión de películas desarrollado con ASP.NET Core MVC y Entity Fra
 ## Requisitos Previos
 
 - .NET 8.0 SDK
-- SQL Server (SQL Server Express)
-- SQL Server Management Studio
+- Docker Desktop (si no tienes SQL Server instalado localmente)
+- SQL Server (SQL Server Express) o acceso a un servidor existente
 
 ## Configuración de la Base de Datos
+
+### Docker
+
+1. Inicie Docker Desktop y, desde la raíz del repositorio, levante el contenedor:
+   ```bash
+   docker compose up -d sqlserver
+   ```
+2. Establezca el entorno `Docker` para que la aplicación utilice el archivo `appsettings.Docker.json`:
+   - macOS / Linux:
+     ```bash
+     ASPNETCORE_ENVIRONMENT=Docker dotnet.exe run --project BackendPro.Web
+     ```
+   - Windows (PowerShell):
+     ```powershell
+     $env:ASPNETCORE_ENVIRONMENT="Docker"
+     dotnet.exe run --project BackendPro.Web
+     ```
+   Ajuste la contraseña en `BackendPro.Web/appsettings.Docker.json` y en la variable `SA_PASSWORD` de `docker-compose.yml` si lo considera necesario.
 
 ### 1. Verificar SQL Server
 
@@ -28,13 +46,6 @@ Start-Service -Name "MSSQL$SQLEXPRESS"
 
 La cadena de conexión está configurada en `BackendPro.Web/appsettings.json`:
 
-**SQL Server Express (predeterminado):**
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=BackendPro;Trusted_Connection=True;TrustServerCertificate=True"
-}
-```
-
 ### 3. Crear la Base de Datos desde Migraciones
 
 Ejecute el siguiente comando desde la raíz del proyecto:
@@ -42,6 +53,8 @@ Ejecute el siguiente comando desde la raíz del proyecto:
 ```bash
 dotnet.exe ef database update --project BackendPro.Infrastructure --startup-project BackendPro.Web
 ```
+
+Cuando use el contenedor, asegúrese de que esté en ejecución (`docker compose up -d sqlserver`) y, si necesita la conexión Docker, ejecute el comando con `ASPNETCORE_ENVIRONMENT=Docker` configurado.
 
 Este comando:
 - Creará la base de datos `BackendPro` si no existe
