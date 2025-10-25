@@ -28,6 +28,7 @@ builder.Services.AddScoped<IGeneroService, GeneroService>();
 builder.Services.AddScoped<IActorService, ActorService>();
 builder.Services.AddScoped<IDirectorService, DirectorService>();
 builder.Services.AddScoped<IPeliculaService, PeliculaService>();
+builder.Services.AddScoped<IResenaService, ResenaService>();
 builder.Services.AddScoped<IFileStorageService>(provider =>
 {
     var env = provider.GetRequiredService<IWebHostEnvironment>();

@@ -35,7 +35,7 @@ public class ActoresController(IActorService actorService) : Controller
         var viewModel = new ActorDetailsViewModel
         {
             Actor = actor,
-            Peliculas = [],
+            Peliculas = (actor.Peliculas ?? []).ToList().AsReadOnly(),
         };
 
         return View(viewModel);

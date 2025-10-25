@@ -11,4 +11,5 @@ public class PeliculaDto
     public GeneroDto Genero { get; set; } = null!;
     public DirectorDto Director { get; set; } = null!;
     public ICollection<ActorDto> Actores { get; set; } = [];
+    public ICollection<ResenaDto> Resenas { get; set; } = [];
 }

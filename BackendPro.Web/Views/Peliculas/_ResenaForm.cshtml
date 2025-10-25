@@ -1,0 +1,40 @@
+@model BackendPro.Web.Models.ResenaFormViewModel
+
+<div class="resena-form-container">
+    <h5>Agregar Reseña</h5>
+    
+    <form asp-action="Create" asp-controller="Resenas" method="post" class="needs-validation" novalidate>
+        <input asp-for="PeliculaId" type="hidden" />
+        @Html.AntiForgeryToken()
+        
+        <div class="mb-3">
+            <label asp-for="Autor" class="form-label"></label>
+            <input asp-for="Autor" class="form-control" />
+            <span asp-validation-for="Autor" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Calificacion" class="form-label"></label>
+            <select asp-for="Calificacion" class="form-select">
+                <option value="5">★★★★★ (5)</option>
+                <option value="4">★★★★☆ (4)</option>
+                <option value="3">★★★☆☆ (3)</option>
+                <option value="2">★★☆☆☆ (2)</option>
+                <option value="1">★☆☆☆☆ (1)</option>
+            </select>
+            <span asp-validation-for="Calificacion" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Comentario" class="form-label"></label>
+            <textarea asp-for="Comentario" class="form-control" rows="4" placeholder="Comparte tu opinión sobre esta película..."></textarea>
+            <span asp-validation-for="Comentario" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Publicar Reseña</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

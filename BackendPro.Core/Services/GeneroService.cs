@@ -112,6 +112,13 @@ public class GeneroService(IUnitOfWork unitOfWork, ILogger<GeneroService> logger
             Id = genero.Id,
             Nombre = genero.Nombre,
             Descripcion = genero.Descripcion,
+            Peliculas = genero.Peliculas?.Select(p => new PeliculaSummaryDto
+            {
+                Id = p.Id,
+                Titulo = p.Titulo,
+                FechaEstreno = p.FechaEstreno,
+                Genero = new GeneroDto { Id = p.Genero.Id, Nombre = p.Genero.Nombre },
+            }).ToList() ?? [],
         };
     }
 }

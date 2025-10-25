@@ -6,5 +6,6 @@ public interface IUnitOfWork : IDisposable
     IActorRepository Actores { get; }
     IDirectorRepository Directores { get; }
     IPeliculaRepository Peliculas { get; }
+    IResenaRepository Resenas { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

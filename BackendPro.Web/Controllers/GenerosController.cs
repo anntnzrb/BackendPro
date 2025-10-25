@@ -35,7 +35,7 @@ public class GenerosController(IGeneroService generoService) : Controller
         var viewModel = new GeneroDetailsViewModel
         {
             Genero = genero,
-            Peliculas = [],
+            Peliculas = (genero.Peliculas ?? []).ToList().AsReadOnly(),
         };
 
         return View(viewModel);
@@ -138,7 +138,7 @@ public class GenerosController(IGeneroService generoService) : Controller
         var viewModel = new GeneroDetailsViewModel
         {
             Genero = genero,
-            Peliculas = [],
+            Peliculas = (genero.Peliculas ?? []).ToList().AsReadOnly(),
         };
 
         return View(viewModel);
@@ -166,7 +166,7 @@ public class GenerosController(IGeneroService generoService) : Controller
             var viewModel = new GeneroDetailsViewModel
             {
                 Genero = genero,
-                Peliculas = [],
+                Peliculas = (genero.Peliculas ?? []).ToList().AsReadOnly(),
             };
             return View(viewModel);
         }

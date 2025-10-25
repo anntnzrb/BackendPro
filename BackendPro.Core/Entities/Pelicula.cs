@@ -21,4 +21,5 @@ public class Pelicula
     public virtual Director Director { get; set; } = null!;
 
     public virtual ICollection<PeliculaActor> PeliculasActor { get; set; } = [];
+    public virtual ICollection<Resena> Resenas { get; set; } = [];
 }

@@ -88,6 +88,13 @@ public class ActorService(IUnitOfWork unitOfWork, ILogger<ActorService> logger) 
             Nombre = actor.Nombre,
             Biografia = actor.Biografia,
             FechaNacimiento = actor.FechaNacimiento,
+            Peliculas = actor.PeliculasActor?.Select(pa => new PeliculaSummaryDto
+            {
+                Id = pa.Pelicula.Id,
+                Titulo = pa.Pelicula.Titulo,
+                FechaEstreno = pa.Pelicula.FechaEstreno,
+                Genero = new GeneroDto { Id = pa.Pelicula.Genero.Id, Nombre = pa.Pelicula.Genero.Nombre },
+            }).ToList() ?? [],
         };
     }
 }

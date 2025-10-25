@@ -151,6 +151,15 @@ public class PeliculaService(IUnitOfWork unitOfWork, ILogger<PeliculaService> lo
                     FechaNacimiento = pa.Actor.FechaNacimiento,
                 })
                 .ToList(),
+            Resenas = pelicula.Resenas?.Select(r => new ResenaDto
+            {
+                Id = r.Id,
+                Autor = r.Autor,
+                Comentario = r.Comentario,
+                Calificacion = r.Calificacion,
+                FechaPublicacion = r.FechaPublicacion,
+                PeliculaId = r.PeliculaId,
+            }).ToList() ?? [],
         };
     }
 }

@@ -27,11 +27,15 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <label for="generoId" class="form-label">Género</label>
+                    @{
+                        var allGeneros = new List<SelectListItem>();
+                        allGeneros.Add(new SelectListItem("Todos los géneros", "", selectedGeneroId == null));
+                        allGeneros.AddRange(generos.Select(g => new SelectListItem(g.Nombre, g.Id.ToString(), selectedGeneroId == g.Id)));
+                    }
                     <select name="generoId" id="generoId" class="form-select">
-                        <option value="">Todos los géneros</option>
-                        @foreach (var genero in generos)
+                        @foreach (var item in allGeneros)
                         {
-                            <option value="@genero.Id" selected="@(selectedGeneroId == genero.Id)">@genero.Nombre</option>
+                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
                         }
                     </select>
                 </div>
@@ -86,6 +90,7 @@ else
         <table class="table table-sm table-striped table-hover align-middle">
             <thead>
                 <tr>
+                    <th>Póster</th>
                     <th>Título</th>
                     <th>Género</th>
                     <th>Director</th>
@@ -107,6 +112,12 @@ else
                     ? "Sin sinopsis disponible."
                     : (pelicula.Sinopsis.Length > 120 ? pelicula.Sinopsis[..120] + "…" : pelicula.Sinopsis);
                 <tr>
+                    <td>
+                        <img src="@(string.IsNullOrEmpty(pelicula.ImagenUrl) ? "/images/placeholders/movie.png" : pelicula.ImagenUrl)" 
+                             alt="Póster de @pelicula.Titulo" 
+                             class="img-thumbnail" 
+                             style="width: 50px; height: 75px; object-fit: cover;" />
+                    </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@pelicula.Id">@pelicula.Titulo</a>
                         <div class="text-muted small">@sinopsis</div>

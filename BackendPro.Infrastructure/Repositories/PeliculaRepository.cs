@@ -14,6 +14,7 @@ public class PeliculaRepository(ApplicationDbContext context) : GenericRepositor
             .Include(p => p.Director)
             .Include(p => p.PeliculasActor)
                 .ThenInclude(pa => pa.Actor)
+            .Include(p => p.Resenas)
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken)
             .ConfigureAwait(false);
@@ -26,6 +27,7 @@ public class PeliculaRepository(ApplicationDbContext context) : GenericRepositor
             .Include(p => p.Director)
             .Include(p => p.PeliculasActor)
                 .ThenInclude(pa => pa.Actor)
+            .Include(p => p.Resenas)
             .AsNoTracking()
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -38,6 +40,7 @@ public class PeliculaRepository(ApplicationDbContext context) : GenericRepositor
             .Include(p => p.Director)
             .Include(p => p.PeliculasActor)
                 .ThenInclude(pa => pa.Actor)
+            .Include(p => p.Resenas)
             .AsQueryable();
 
         if (generoId.HasValue)
@@ -64,6 +67,7 @@ public class PeliculaRepository(ApplicationDbContext context) : GenericRepositor
             .Include(p => p.Director)
             .Include(p => p.PeliculasActor)
                 .ThenInclude(pa => pa.Actor)
+            .Include(p => p.Resenas)
             .AsNoTracking()
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);

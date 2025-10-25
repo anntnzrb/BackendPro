@@ -5,5 +5,5 @@ namespace BackendPro.Web.Models;
 public class ActorDetailsViewModel
 {
     public ActorDto Actor { get; set; } = new();
-    public IReadOnlyList<PeliculaSummaryViewModel> Peliculas { get; set; } = Array.Empty<PeliculaSummaryViewModel>();
+    public IReadOnlyList<PeliculaSummaryDto> Peliculas { get; set; } = Array.Empty<PeliculaSummaryDto>();
 }

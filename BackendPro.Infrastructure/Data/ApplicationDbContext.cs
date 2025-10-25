@@ -10,6 +10,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Director> Directores => Set<Director>();
     public DbSet<Actor> Actores => Set<Actor>();
     public DbSet<PeliculaActor> PeliculasActor => Set<PeliculaActor>();
+    public DbSet<Resena> Resenas => Set<Resena>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,6 +77,21 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.HasOne(pa => pa.Actor)
                   .WithMany(a => a.PeliculasActor)
                   .HasForeignKey(pa => pa.ActorId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure Resena entity
+        modelBuilder.Entity<Resena>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Autor).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Comentario).IsRequired().HasMaxLength(1000);
+            entity.Property(e => e.Calificacion).IsRequired();
+            entity.Property(e => e.FechaPublicacion).IsRequired();
+
+            entity.HasOne(e => e.Pelicula)
+                  .WithMany(p => p.Resenas)
+                  .HasForeignKey(e => e.PeliculaId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
 

@@ -6,4 +6,5 @@ public class ActorDto
     public string Nombre { get; set; } = string.Empty;
     public string? Biografia { get; set; }
     public DateTime FechaNacimiento { get; set; }
+    public ICollection<PeliculaSummaryDto> Peliculas { get; set; } = [];
 }
