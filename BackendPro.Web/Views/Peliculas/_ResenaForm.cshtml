@@ -1,9 +1,18 @@
 @model BackendPro.Web.Models.ResenaFormViewModel
 
+@{
+    var isEdit = Model.Id.HasValue;
+    var formAction = isEdit ? "Edit" : "Create";
+}
+
 <div class="resena-form-container">
-    <h5>Agregar Reseña</h5>
+    <h5>@(isEdit ? "Editar Reseña" : "Agregar Reseña")</h5>
     
-    <form asp-action="Create" asp-controller="Resenas" method="post" class="needs-validation" novalidate>
+    <form asp-action="@formAction" asp-controller="Resenas" asp-route-id="@(isEdit ? Model.Id : null)" method="post" class="needs-validation" novalidate>
+        @if (isEdit)
+        {
+            <input asp-for="Id" type="hidden" />
+        }
         <input asp-for="PeliculaId" type="hidden" />
         @Html.AntiForgeryToken()
         
@@ -34,7 +43,3 @@
         <button type="submit" class="btn btn-primary">Publicar Reseña</button>
     </form>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

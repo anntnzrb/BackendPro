@@ -113,7 +113,7 @@ else
                     : (pelicula.Sinopsis.Length > 120 ? pelicula.Sinopsis[..120] + "…" : pelicula.Sinopsis);
                 <tr>
                     <td>
-                        <img src="@(string.IsNullOrEmpty(pelicula.ImagenUrl) ? "/images/placeholders/movie.png" : pelicula.ImagenUrl)" 
+                        <img src="@(string.IsNullOrEmpty(pelicula.ImagenUrl) ? "/images/placeholders/movie.svg" : pelicula.ImagenUrl)" 
                              alt="Póster de @pelicula.Titulo" 
                              class="img-thumbnail" 
                              style="width: 50px; height: 75px; object-fit: cover;" />

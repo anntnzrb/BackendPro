@@ -194,7 +194,7 @@
                             {
                                 <div class="actor-item" data-actor-name="@actor.Text.ToLower()">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="@actor.Value" id="actor_@actor.Value" name="ActorIds">
+                                        <input class="form-check-input" type="checkbox" value="@actor.Value" id="actor_@actor.Value" name="ActorIds" @(actor.Selected ? "checked" : null)>
                                         <label class="form-check-label actor-label" for="actor_@actor.Value">
                                             <i class="fas fa-user-circle me-2"></i>
                                             @actor.Text

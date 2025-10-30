@@ -1,0 +1,19 @@
+<svg width="200" height="300" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Póster genérico de película</title>
+  <desc id="desc">Icono simple de una claqueta sobre fondo degradado.</desc>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5743f8"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="300" rx="16" fill="url(#grad)"/>
+  <g fill="#ffffff" opacity="0.8">
+    <path d="M46 88h108v20H46z"/>
+    <path d="M46 112h108v100H46z"/>
+    <path d="M58 76l16-20h20l-16 20z"/>
+    <path d="M94 76l16-20h20l-16 20z"/>
+    <path d="M130 76l16-20h20l-16 20z"/>
+  </g>
+  <text x="50%" y="240" font-family="Poppins, Arial, sans-serif" font-size="28" fill="#ffffff" text-anchor="middle" opacity="0.9">KinemaFX</text>
+</svg>

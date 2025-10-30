@@ -139,6 +139,6 @@ public class ResenasController(IResenaService resenaService) : Controller
     public async Task<IActionResult> GetByPeliculaId(int peliculaId)
     {
         var resenas = await _resenaService.GetByPeliculaIdAsync(peliculaId).ConfigureAwait(false);
-        return PartialView("_ResenaList", resenas);
+        return PartialView("~/Views/Peliculas/_ResenaList.cshtml", resenas);
     }
 }

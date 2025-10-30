@@ -1,0 +1,26 @@
+@model BackendPro.Web.Models.ResenaFormViewModel
+@{
+    ViewData["Title"] = "Editar reseña";
+}
+
+<section class="toolbar">
+    <div>
+        <h2><i class="fas fa-pen"></i> Editar reseña</h2>
+        <p>Actualiza los datos de la reseña seleccionada.</p>
+    </div>
+    <div class="toolbar-actions">
+        <a class="btn btn-outline-secondary btn-sm" asp-controller="Peliculas" asp-action="Details" asp-route-id="@Model.PeliculaId" aria-label="Volver a la película">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+</section>
+
+<div class="row">
+    <div class="col-md-6">
+        <partial name="~/Views/Peliculas/_ResenaForm.cshtml" model="Model" />
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
